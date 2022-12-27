@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import PageHowItWorks from "./Pages/PageHowItWorks";
 import PageHome from "./Pages/PageHome";
@@ -5,6 +6,8 @@ import PageNewWishList from "./Pages/PageNewWishList";
 import PageEditWishList from "./Pages/PageEditWishList";
 import PageAuth from "./Pages/PageAuth";
 import { Navbar } from "../components/Navbar";
+import { useSelector } from "react-redux";
+import { checkIsAuth } from "../redux/slices/authSlice";
 
 export const PAGES = {
   pageHome: {
@@ -34,8 +37,10 @@ export const PAGES = {
   },
 };
 
-export const AppRouter = (isAuthenticated) => {
-  if (isAuthenticated) {
+export const AppRouter = () => {
+  const isAuth = useSelector(checkIsAuth);
+
+  if (isAuth) {
     return (
       <Routes>
         <Route path={PAGES.pageHome.path} element={<Navbar />}>
@@ -53,7 +58,7 @@ export const AppRouter = (isAuthenticated) => {
   }
   return (
     <Routes>
-      <Route path="*" element={<PageAuth />} />
+      <Route path="/login" element={<PageAuth />} />
     </Routes>
   );
 };

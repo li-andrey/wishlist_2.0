@@ -14,10 +14,9 @@ const getUsers = async (_req, res) => {
 // Регистрация пользователя
 const registration = async (req, res) => {
   try {
-    console.log("Body:", req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return res.json({
         errors: errors.array(),
         message: "Некорректные данные при регистраци",
       });
@@ -25,9 +24,7 @@ const registration = async (req, res) => {
     const { name, email, password } = req.body;
     const candidate = await User.findOne({ email });
     if (candidate) {
-      return res
-        .status(400)
-        .json({ message: "Такой пользователь уже существует" });
+      return res.json({ message: "Такой пользователь уже существует" });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({
@@ -35,10 +32,13 @@ const registration = async (req, res) => {
       email,
       password: hashedPassword,
     });
+    const token = jwt.sign({ userId: user._id }, JWT_ACCESS_SECRET, {
+      expiresIn: "1h",
+    });
     await user.save();
-    res.status(201).json({ message: "Пользователь создан" });
+    res.json({ user, token, message: "Пользователь создан" });
   } catch (error) {
-    res.status(500).json({ message: "Что-то пошло не так" });
+    res.json({ message: "Что-то пошло не так" });
   }
 };
 
@@ -47,7 +47,7 @@ const login = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return res.json({
         errors: errors.array(),
         message: "Некорректные данные при регистраци",
       });
@@ -55,20 +55,18 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Пользователь не найден" });
+      return res.json({ message: "Пользователь не найден" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res
-        .status(400)
-        .json({ message: "Неверный пароль, попробуйте снова" });
+      return res.json({ message: "Неверный пароль, попробуйте снова" });
     }
     const token = jwt.sign({ userId: user.id }, JWT_ACCESS_SECRET, {
       expiresIn: "1h",
     });
     res.json({ token, userId: user.id, message: "Пользователь в сети" });
   } catch (error) {
-    res.status(500).json({ message: "Что-то пошло не так" });
+    res.json({ message: "Что-то пошло не так" });
   }
 };
 

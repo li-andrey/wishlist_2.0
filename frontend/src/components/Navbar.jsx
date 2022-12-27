@@ -1,15 +1,16 @@
-import { useContext } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 import { PAGES } from "./AppRouter";
+import { useDispatch } from "react-redux";
+import authSlice from "../redux/slices/authSlice";
 
 export const Navbar = () => {
   const navigate = useNavigate();
-  const auth = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const handleLogout = (event) => {
     event.preventDefault();
-    auth.logout();
+    window.localStorage.removeItem("token");
+    dispatch(authSlice.logout);
     navigate("/");
   };
 
