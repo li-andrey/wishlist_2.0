@@ -8,7 +8,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="wrapper">{routes}</div>
-      <ToastContainer position="bottom-right" />
+      <ToastContainer position="bottom-right" autoClose={2000} />
     </BrowserRouter>
   );
 }

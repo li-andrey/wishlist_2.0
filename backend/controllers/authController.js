@@ -1,73 +1,98 @@
 const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const authService = require("../services/authService");
 const { validationResult } = require("express-validator");
 
-const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
+class AuthController {
+  // Получение списка всех пользователей
+  async getUsers(_req, res) {
+    const users = await User.find({});
+    res.json(users);
+  }
 
-// Получение списка всех пользователей
-const getUsers = async (_req, res) => {
-  const users = await User.find({});
-  res.json(users);
-};
-
-// Регистрация пользователя
-const registration = async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+  // Регистрация пользователя
+  async registration(req, res) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.json({
+          message: "Некорректные данные при регистраци",
+          errors: errors.array(),
+        });
+      }
+      const { name, email, password } = req.body;
+      const userData = await authService.registration(name, email, password);
+      res.cookie("refreshToken", userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      res.json(userData);
+    } catch (error) {
       return res.json({
-        errors: errors.array(),
-        message: "Некорректные данные при регистраци",
+        message: `Что-то пошло не так ${error}`,
       });
     }
-    const { name, email, password } = req.body;
-    const candidate = await User.findOne({ email });
-    if (candidate) {
-      return res.json({ message: "Такой пользователь уже существует" });
-    }
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({
-      name,
-      email,
-      password: hashedPassword,
-    });
-    const token = jwt.sign({ userId: user._id }, JWT_ACCESS_SECRET, {
-      expiresIn: "1h",
-    });
-    await user.save();
-    res.json({ user, token, message: "Пользователь создан" });
-  } catch (error) {
-    res.json({ message: "Что-то пошло не так" });
   }
-};
 
-// Вход в систему
-const login = async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+  // Вход в систему
+  async login(req, res) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.json({
+          message: "Некорректные данные",
+          errors: errors.array(),
+        });
+      }
+      const { email, password } = req.body;
+      const userData = await authService.login(email, password);
+      res.cookie("refreshToken", userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      res.json(userData);
+    } catch (error) {
       return res.json({
-        errors: errors.array(),
-        message: "Некорректные данные при регистраци",
+        message: `Что-то пошло не так ${error}`,
       });
     }
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.json({ message: "Пользователь не найден" });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.json({ message: "Неверный пароль, попробуйте снова" });
-    }
-    const token = jwt.sign({ userId: user.id }, JWT_ACCESS_SECRET, {
-      expiresIn: "1h",
-    });
-    res.json({ token, userId: user.id, message: "Пользователь в сети" });
-  } catch (error) {
-    res.json({ message: "Что-то пошло не так" });
   }
-};
 
-module.exports = { getUsers, registration, login };
+  // Выход из системы
+  async logout(req, res) {
+    try {
+      const { refreshToken } = req.cookies;
+      const token = await authService.logout(refreshToken);
+      res.clearCookie("refreshToken");
+      return res.json(token);
+    } catch (error) {
+      return res.json({
+        message: `Что-то пошло не так ${error}`,
+      });
+    }
+  }
+
+  // Активация пользователя
+  async activate(_req, res) {
+    const users = await User.find({});
+    res.json(users);
+  }
+
+  // Обновление токена
+  async refresh(req, res) {
+    try {
+      const { refreshToken } = req.cookies;
+      const token = await authService.refresh(refreshToken);
+      res.cookie("refreshToken", token.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      return res.json(token);
+    } catch (error) {
+      return res.json({
+        message: `Что-то пошло не так ${error}`,
+      });
+    }
+  }
+}
+
+module.exports = new AuthController();

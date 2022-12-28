@@ -1,5 +1,4 @@
 const express = require("express");
-const path = require("path");
 const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
@@ -7,11 +6,12 @@ const bodyParser = require("body-parser");
 const authRouter = require("./router/authRouter");
 const wishlistsRouter = require("./router/wishlistsRouter");
 const wishlistItemsRouter = require("./router/wishlistItemsRouter");
-
+const cookieParser = require("cookie-parser");
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 app.use("/api", authRouter);
 app.use("/api/wishlists", wishlistsRouter);
 app.use("/api", wishlistItemsRouter);

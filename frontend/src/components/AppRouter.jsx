@@ -58,7 +58,7 @@ export const AppRouter = () => {
   }
   return (
     <Routes>
-      <Route path="/login" element={<PageAuth />} />
+      <Route path="/" element={<PageAuth />} />
     </Routes>
   );
 };
