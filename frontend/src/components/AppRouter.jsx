@@ -6,8 +6,9 @@ import PageNewWishList from "./Pages/PageNewWishList";
 import PageEditWishList from "./Pages/PageEditWishList";
 import PageAuth from "./Pages/PageAuth";
 import { Navbar } from "../components/Navbar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { checkIsAuth } from "../redux/slices/authSlice";
+import { checkAuth } from "../redux/slices/authSlice";
 
 export const PAGES = {
   pageHome: {
@@ -38,7 +39,15 @@ export const PAGES = {
 };
 
 export const AppRouter = () => {
+  const dispatch = useDispatch();
+
   const isAuth = useSelector(checkIsAuth);
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      dispatch(checkAuth());
+    }
+  }, [isAuth]);
 
   if (isAuth) {
     return (

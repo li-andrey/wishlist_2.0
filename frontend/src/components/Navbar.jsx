@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { PAGES } from "./AppRouter";
 import { useDispatch } from "react-redux";
-import authSlice from "../redux/slices/authSlice";
+import { logoutUser } from "../redux/slices/authSlice";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -9,8 +9,7 @@ export const Navbar = () => {
 
   const handleLogout = (event) => {
     event.preventDefault();
-    window.localStorage.removeItem("token");
-    dispatch(authSlice.logout);
+    dispatch(logoutUser());
     navigate("/");
   };
 

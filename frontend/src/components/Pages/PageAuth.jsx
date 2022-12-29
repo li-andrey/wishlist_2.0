@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export default function PageAuth() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -12,8 +14,6 @@ export default function PageAuth() {
   });
   const { status } = useSelector((state) => state.auth);
   const { checkIsAuth } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (status) {

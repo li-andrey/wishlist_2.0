@@ -9,6 +9,7 @@ const register = async ({ name, email, password }) => {
   });
   return data;
 };
+
 const login = async ({ email, password }) => {
   const { data } = await axios.post("/login", {
     email,
@@ -17,4 +18,14 @@ const login = async ({ email, password }) => {
   return data;
 };
 
-export default { register, login };
+const logout = async () => {
+  const response = await axios.post("/logout");
+  return response;
+};
+
+const checkAuth = async () => {
+  const response = await axios.get("/refresh");
+  return response;
+};
+
+export default { register, login, logout, checkAuth };

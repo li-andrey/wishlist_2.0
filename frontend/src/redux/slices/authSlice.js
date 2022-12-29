@@ -12,7 +12,7 @@ export const registerUser = createAsyncThunk(
         password,
       });
       if (user) {
-        window.localStorage.setItem("token", user.token);
+        localStorage.setItem("token", user.accessToken);
       }
       return user;
     } catch (error) {
@@ -25,9 +25,33 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (params) => {
     const { email, password } = params;
     const user = await authService.login({ email, password });
     if (user) {
-      window.localStorage.setItem("token", user.token);
+      localStorage.setItem("token", user.accessToken);
     }
     return user;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
+  try {
+    const res = await authService.logout();
+    if (res) {
+      localStorage.removeItem("token");
+    }
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
+  try {
+    const res = await authService.checkAuth();
+    if (res) {
+      localStorage.setItem("token", res.data.accessToken);
+    }
+    return res.data;
   } catch (error) {
     console.log(error);
   }
@@ -44,6 +68,7 @@ const initialState = {
   user: null,
   token: null,
   isLoading: false,
+  isAuth: false,
   status: null,
 };
 
@@ -56,16 +81,9 @@ const initialState = {
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    logout: (state) => {
-      state.user = null;
-      state.token = null;
-      state.isLoading = false;
-      state.status = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    // Register
+    // register
     builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
       state.status = null;
@@ -73,10 +91,13 @@ export const authSlice = createSlice({
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.isLoading = false;
       state.status = action.payload.message;
-      state.token = action.payload.token;
+      state.token = action.payload.accessToken;
+      state.user = action.payload.user;
+      state.isAuth = true;
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.isLoading = false;
+      state.isAuth = false;
       state.status = action.payload.message;
     });
 
@@ -87,18 +108,56 @@ export const authSlice = createSlice({
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.status = action.payload.message;
       state.user = action.payload.user;
-      state.token = action.payload.token;
+      state.status = action.payload.message;
+      state.token = action.payload.accessToken;
+      state.isAuth = true;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.isLoading = false;
+      state.isAuth = false;
+      state.status = action.payload.message;
+    });
+
+    // logout
+    builder.addCase(logoutUser.pending, (state) => {
+      state.isLoading = true;
+      state.status = null;
+    });
+    builder.addCase(logoutUser.fulfilled, (state, action) => {
+      state.user = null;
+      state.token = null;
+      state.isLoading = false;
+      state.isAuth = false;
+      state.status = null;
+    });
+    builder.addCase(logoutUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isAuth = false;
+      state.status = action.payload.message;
+    });
+
+    // check is auth
+    builder.addCase(checkAuth.pending, (state) => {
+      state.isLoading = true;
+      state.status = null;
+    });
+    builder.addCase(checkAuth.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.user = action.payload.user;
+      state.status = action.payload.message;
+      state.token = action.payload.accessToken;
+      state.isAuth = true;
+    });
+    builder.addCase(checkAuth.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isAuth = false;
       state.status = action.payload.message;
     });
   },
 });
 
-export const checkIsAuth = (state) => Boolean(state.auth.token);
+export const checkIsAuth = (state) => Boolean(state.auth.isAuth);
 
 export const { logout } = authSlice.actions;
 

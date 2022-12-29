@@ -11,19 +11,20 @@ class AuthService {
       return { message: "Такой пользователь уже существует" };
     }
     const hashedPassword = await bcrypt.hash(password, 12);
+    // const activationLink = "some-link-to-register";
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
+      // activationLink,
     });
 
     // Отправка упрощенного welcomeисьма с логином и паролем
     await mailService.sendWelcomeMail(email, password);
 
-    // const activationLink = "dasdasdsad";
     // await mailService.sendActivationMail(
     //   email,
-    //   `${process.env.API_URL}/api/activate/${activationLink}`
+    //   `${process.env.API_URL}api/activate/${activationLink}`
     // );
 
     const userDto = new UserDto(user);
@@ -52,12 +53,21 @@ class AuthService {
     return token;
   }
 
+  // async activate(activationLink) {
+  //   const user = await User.findOne({ activationLink });
+  //   if (!user) {
+  //     return { message: "Некорректная ссылка" };
+  //   }
+  //   user.isActivated = true;
+  //   await user.save();
+  //   return user;
+  // }
+
   async refresh(refreshToken) {
     if (!refreshToken) {
       return { message: "Пользователь не авторизирован" };
     }
     const userData = tokenService.validateRefreshToken(refreshToken);
-
     const tokenFromDb = await tokenService.findToken(refreshToken);
     if (!userData || !tokenFromDb) {
       return { message: "Пользователь не авторизирован" };

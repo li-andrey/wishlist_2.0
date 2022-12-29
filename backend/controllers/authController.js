@@ -49,6 +49,7 @@ class AuthController {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
+
       res.json(userData);
     } catch (error) {
       return res.json({
@@ -61,6 +62,7 @@ class AuthController {
   async logout(req, res) {
     try {
       const { refreshToken } = req.cookies;
+
       const token = await authService.logout(refreshToken);
       res.clearCookie("refreshToken");
       return res.json(token);
@@ -72,21 +74,28 @@ class AuthController {
   }
 
   // Активация пользователя
-  async activate(_req, res) {
-    const users = await User.find({});
-    res.json(users);
+  async activate(req, res) {
+    try {
+      const activationLink = req.params.link;
+      await authService.activate(activationLink);
+      return res.redirect(process.env.CLIENT_URL);
+    } catch (error) {
+      return res.json({
+        message: `Что-то пошло не так ${error}`,
+      });
+    }
   }
 
   // Обновление токена
   async refresh(req, res) {
     try {
       const { refreshToken } = req.cookies;
-      const token = await authService.refresh(refreshToken);
-      res.cookie("refreshToken", token.refreshToken, {
+      const userData = await authService.refresh(refreshToken);
+      res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
-      return res.json(token);
+      return res.json(userData);
     } catch (error) {
       return res.json({
         message: `Что-то пошло не так ${error}`,
