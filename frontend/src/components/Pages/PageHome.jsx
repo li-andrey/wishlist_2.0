@@ -21,7 +21,6 @@ async function getAllWishList() {
 export default function PageHome() {
   const navigate = useNavigate();
   const [wishLists, setWishLists] = React.useState([]);
-  console.log(wishLists);
   React.useEffect(() => {
     const callGetAllWishLists = async () => {
       const items = await getAllWishList();

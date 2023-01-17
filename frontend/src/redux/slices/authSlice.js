@@ -3,7 +3,7 @@ import authService from "../../services/authService";
 
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
-  async (params) => {
+  async (params, { rejectWithValue }) => {
     try {
       const { name, email, password } = params;
       const user = await authService.register({
@@ -16,22 +16,25 @@ export const registerUser = createAsyncThunk(
       }
       return user;
     } catch (error) {
-      console.log(error);
+      return rejectWithValue(error.response.data);
     }
   }
 );
-export const loginUser = createAsyncThunk("auth/loginUser", async (params) => {
-  try {
-    const { email, password } = params;
-    const user = await authService.login({ email, password });
-    if (user) {
-      localStorage.setItem("token", user.accessToken);
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (params, { rejectWithValue }) => {
+    try {
+      const { email, password } = params;
+      const user = await authService.login({ email, password });
+      if (user) {
+        localStorage.setItem("token", user.accessToken);
+      }
+      return user;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
-    return user;
-  } catch (error) {
-    console.log(error);
   }
-});
+);
 
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
   try {
@@ -45,17 +48,20 @@ export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
   }
 });
 
-export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
-  try {
-    const res = await authService.checkAuth();
-    if (res) {
-      localStorage.setItem("token", res.data.accessToken);
+export const checkAuth = createAsyncThunk(
+  "auth/checkAuth",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await authService.checkAuth();
+      if (res) {
+        localStorage.setItem("token", res.data.accessToken);
+      }
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
-    return res.data;
-  } catch (error) {
-    console.log(error);
   }
-});
+);
 
 // interface AuthSliceState {
 //     user: {},
@@ -124,7 +130,7 @@ export const authSlice = createSlice({
       state.isLoading = true;
       state.status = null;
     });
-    builder.addCase(logoutUser.fulfilled, (state, action) => {
+    builder.addCase(logoutUser.fulfilled, (state) => {
       state.user = null;
       state.token = null;
       state.isLoading = false;
@@ -157,7 +163,8 @@ export const authSlice = createSlice({
   },
 });
 
-export const checkIsAuth = (state) => Boolean(state.auth.isAuth);
+export const isAuthState = (state) => Boolean(state.auth.isAuth);
+export const isLoadingState = (state) => Boolean(state.auth.isLoading);
 
 export const { logout } = authSlice.actions;
 

@@ -3,12 +3,13 @@ const bcrypt = require("bcryptjs");
 const mailService = require("./mailService");
 const tokenService = require("./tokenService");
 const UserDto = require("../dtos/userDto");
+const ApiError = require("../exceptions/api-error");
 
 class AuthService {
   async registration(name, email, password) {
     const candidate = await User.findOne({ email });
     if (candidate) {
-      return { message: "Такой пользователь уже существует" };
+      throw ApiError.BadRequest("Такой пользователь уже существует");
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     // const activationLink = "some-link-to-register";
@@ -36,11 +37,11 @@ class AuthService {
   async login(email, password) {
     const user = await User.findOne({ email });
     if (!user) {
-      return { message: "Пользователь не найден" };
+      throw ApiError.BadRequest("Пользователь не найден");
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return { message: "Неверный пароль, попробуйте снова" };
+      throw ApiError.BadRequest("Неверный пароль, попробуйте снова");
     }
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
@@ -65,12 +66,12 @@ class AuthService {
 
   async refresh(refreshToken) {
     if (!refreshToken) {
-      return { message: "Пользователь не авторизирован" };
+      throw ApiError.UnauthorizedError("Пользователь не авторизирован");
     }
     const userData = tokenService.validateRefreshToken(refreshToken);
-    const tokenFromDb = await tokenService.findToken(refreshToken);
+    const tokenFromDb = tokenService.findToken(refreshToken);
     if (!userData || !tokenFromDb) {
-      return { message: "Пользователь не авторизирован" };
+      throw ApiError.UnauthorizedError("Пользователь не авторизирован");
     }
     const user = await User.findOne({ email: userData.email });
     const userDto = new UserDto(user);

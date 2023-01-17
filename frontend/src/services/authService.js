@@ -1,8 +1,9 @@
-import axios from "../utils/axios";
+import myAxios from "../utils/axios";
+import axios from "axios";
 // import { AuthArgs } from '../redux/slices/authSlice';
 
 const register = async ({ name, email, password }) => {
-  const { data } = await axios.post("/registration", {
+  const { data } = await myAxios.post("/registration", {
     name,
     email,
     password,
@@ -11,7 +12,7 @@ const register = async ({ name, email, password }) => {
 };
 
 const login = async ({ email, password }) => {
-  const { data } = await axios.post("/login", {
+  const { data } = await myAxios.post("/login", {
     email,
     password,
   });
@@ -19,12 +20,15 @@ const login = async ({ email, password }) => {
 };
 
 const logout = async () => {
-  const response = await axios.post("/logout");
+  const response = await myAxios.post("/logout");
   return response;
 };
 
 const checkAuth = async () => {
-  const response = await axios.get("/refresh");
+  const response = await axios.get("/refresh", {
+    withCredentials: true,
+    baseURL: "http://localhost:3100/api/",
+  });
   return response;
 };
 

@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const authService = require("../services/authService");
 const { validationResult } = require("express-validator");
+const ApiError = require("../exceptions/api-error");
 
 class AuthController {
   // Получение списка всех пользователей
@@ -10,14 +11,16 @@ class AuthController {
   }
 
   // Регистрация пользователя
-  async registration(req, res) {
+  async registration(req, res, next) {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.json({
-          message: "Некорректные данные при регистраци",
-          errors: errors.array(),
-        });
+        return next(
+          ApiError.BadRequest(
+            "Некорректные данные при регистраци",
+            errors.array()
+          )
+        );
       }
       const { name, email, password } = req.body;
       const userData = await authService.registration(name, email, password);
@@ -27,21 +30,16 @@ class AuthController {
       });
       res.json(userData);
     } catch (error) {
-      return res.json({
-        message: `Что-то пошло не так ${error}`,
-      });
+      next(error);
     }
   }
 
   // Вход в систему
-  async login(req, res) {
+  async login(req, res, next) {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.json({
-          message: "Некорректные данные",
-          errors: errors.array(),
-        });
+        return next(ApiError.BadRequest("Некорректные данные", errors.array()));
       }
       const { email, password } = req.body;
       const userData = await authService.login(email, password);
@@ -52,42 +50,35 @@ class AuthController {
 
       res.json(userData);
     } catch (error) {
-      return res.json({
-        message: `Что-то пошло не так ${error}`,
-      });
+      next(error);
     }
   }
 
   // Выход из системы
-  async logout(req, res) {
+  async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-
       const token = await authService.logout(refreshToken);
       res.clearCookie("refreshToken");
       return res.json(token);
     } catch (error) {
-      return res.json({
-        message: `Что-то пошло не так ${error}`,
-      });
+      next(error);
     }
   }
 
   // Активация пользователя
-  async activate(req, res) {
+  async activate(req, res, next) {
     try {
       const activationLink = req.params.link;
       await authService.activate(activationLink);
       return res.redirect(process.env.CLIENT_URL);
     } catch (error) {
-      return res.json({
-        message: `Что-то пошло не так ${error}`,
-      });
+      next(error);
     }
   }
 
   // Обновление токена
-  async refresh(req, res) {
+  async refresh(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
       const userData = await authService.refresh(refreshToken);
@@ -97,9 +88,7 @@ class AuthController {
       });
       return res.json(userData);
     } catch (error) {
-      return res.json({
-        message: `Что-то пошло не так ${error}`,
-      });
+      next(error);
     }
   }
 }

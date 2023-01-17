@@ -7,6 +7,8 @@ const authRouter = require("./router/authRouter");
 const wishlistsRouter = require("./router/wishlistsRouter");
 const wishlistItemsRouter = require("./router/wishlistItemsRouter");
 const cookieParser = require("cookie-parser");
+const errorMiddleware = require("./middlewares/error-middleware");
+
 const app = express();
 
 app.use(express.json());
@@ -17,7 +19,7 @@ app.use("/api/wishlists", wishlistsRouter);
 app.use("/api", wishlistItemsRouter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(errorMiddleware);
 const PORT = process.env.PORT || 3100;
 const DB_URL = process.env.DB_URL;
 

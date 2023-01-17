@@ -1,73 +1,29 @@
-import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
-import PageHowItWorks from "./Pages/PageHowItWorks";
-import PageHome from "./Pages/PageHome";
-import PageNewWishList from "./Pages/PageNewWishList";
-import PageEditWishList from "./Pages/PageEditWishList";
-import PageAuth from "./Pages/PageAuth";
+import { Outlet } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
-import { useDispatch, useSelector } from "react-redux";
-import { checkIsAuth } from "../redux/slices/authSlice";
-import { checkAuth } from "../redux/slices/authSlice";
-
-export const PAGES = {
-  pageHome: {
-    id: "pageHome",
-    title: "Главная",
-    path: "/",
-  },
-  howItWorks: {
-    id: "howItWorks",
-    title: "Как это работает",
-    path: "/how_it_works",
-  },
-  newWishList: {
-    id: "newWishList",
-    title: "Создать WishList",
-    path: "/wishlists",
-  },
-  editWishList: {
-    id: "editWishList",
-    title: "Редактирование WishList",
-    path: "/wishlists/:wishListId",
-  },
-  pageAuth: {
-    id: "pageAuth",
-    title: "Авторизация",
-    path: "/",
-  },
-};
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import PageAuth from "./Pages/PageAuth";
+import { useSelector } from "react-redux";
+import { isAuthState, isLoadingState } from "../redux/slices/authSlice";
 
 export const AppRouter = () => {
-  const dispatch = useDispatch();
+  const isAuth = useSelector(isAuthState);
+  const isLoading = useSelector(isLoadingState);
+  console.log("11111", isAuth);
 
-  const isAuth = useSelector(checkIsAuth);
-
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      dispatch(checkAuth());
-    }
-  }, [isAuth]);
-
-  if (isAuth) {
-    return (
-      <Routes>
-        <Route path={PAGES.pageHome.path} element={<Navbar />}>
-          <Route index element={<PageHome />} />
-          <Route path={PAGES.howItWorks.path} element={<PageHowItWorks />} />
-          <Route path={PAGES.newWishList.path} element={<PageNewWishList />} />
-          <Route
-            path={PAGES.editWishList.path}
-            element={<PageEditWishList />}
-          />
-          <Route path="*" element={<PageHome />} />
-        </Route>
-      </Routes>
-    );
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
+
+  if (!isAuth) {
+    return <PageAuth />;
+  }
+
   return (
-    <Routes>
-      <Route path="/" element={<PageAuth />} />
-    </Routes>
+    <>
+      <Navbar />
+      <Outlet />
+      <ToastContainer position="bottom-right" autoClose={2000} />
+    </>
   );
 };

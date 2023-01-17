@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { registerUser, loginUser } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function PageAuth() {
   const dispatch = useDispatch();
@@ -38,7 +40,6 @@ export default function PageAuth() {
 
   const handleTest = (e) => {
     e.preventDefault();
-    setForm({ ...form });
   };
 
   return (
@@ -89,6 +90,7 @@ export default function PageAuth() {
           </button>
         </div>
       </form>
+      <ToastContainer position="bottom-right" autoClose={2000} />
     </>
   );
 }
