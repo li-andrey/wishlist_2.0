@@ -1,210 +1,193 @@
 import React from "react";
-import { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getWishlist } from "../../redux/slices/wishlistSlice";
+import { getAllWishlistItems } from "../../redux/slices/wishlistItemSlice";
+import { addWishlistItem } from "../../redux/slices/wishlistItemSlice";
+import { editWishlistItem } from "../../redux/slices/wishlistItemSlice";
+import { deleteWishlistItem } from "../../redux/slices/wishlistItemSlice";
 
-// PATCH редактирования WishList
-/* async function patchWishList(wishListId) {
-  // Default options are marked with *
-  const data = {};
-  const url = `/api/wishlists/${wishListId}`;
-  const response = await fetch(url, {
-    method: 'PATCH', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
-    headers: {
-      'Content-Type': 'application/json',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
- */
-// POST добавление WishListItem
-async function postNewWishListItem(
-  wishListId,
-  picture,
-  title,
-  comment,
-  desireDegree
-) {
-  // Default options are marked with *
-  const data = { picture, title, comment, desireDegree };
-  const url = `http://localhost:3100/api/wishlists/${wishListId}/wishlist_item/`;
-  const response = await fetch(url, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
+// // PATCH редактирования Wishlist
+// /* async function patchWishlist(wishlistId) {
+//   // Default options are marked with *
+//   const data = {};
+//   const url = `/api/wishlists/${wishlistId}`;
+//   const response = await fetch(url, {
+//     method: 'PATCH', // *GET, POST, PUT, DELETE, etc.
+//     mode: 'cors', // no-cors, *cors, same-origin
+//     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: 'same-origin', // include, *same-origin, omit
+//     headers: {
+//       'Content-Type': 'application/json',
+//       // 'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     redirect: 'follow', // manual, *follow, error
+//     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+//     body: JSON.stringify(data), // body data type must match "Content-Type" header
+//   });
+//   return response.json(); // parses JSON response into native JavaScript objects
+// }
+//  */
+// // POST добавление WishlistItem
+// async function postNewWishlistItem(
+//   wishlistId,
+//   picture,
+//   title,
+//   comment,
+//   desireDegree
+// ) {
+//   // Default options are marked with *
+//   const data = { picture, title, comment, desireDegree };
+//   const url = `http://localhost:3100/api/wishlists/${wishlistId}/wishlist_item/`;
+//   const response = await fetch(url, {
+//     method: "POST", // *GET, POST, PUT, DELETE, etc.
+//     mode: "cors", // no-cors, *cors, same-origin
+//     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: "same-origin", // include, *same-origin, omit
+//     headers: {
+//       "Content-Type": "application/json",
+//       // 'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     redirect: "follow", // manual, *follow, error
+//     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+//     body: JSON.stringify(data), // body data type must match "Content-Type" header
+//   });
+//   return response.json(); // parses JSON response into native JavaScript objects
+// }
 
-// PATCH редактирование WishListItem
-async function patchWishListItem(
-  wishListId,
-  wishListItemId,
-  picture,
-  title,
-  comment,
-  desireDegree
-) {
-  // Default options are marked with *
-  const data = { picture, title, comment, desireDegree };
-  const url = `http://localhost:3100/api/wishlists/${wishListId}/wishlist_item/${wishListItemId}`;
-  const response = await fetch(url, {
-    method: "PATCH", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
+// // PATCH редактирование WishlistItem
+// async function patchWishlistItem(
+//   wishlistId,
+//   wishListItemId,
+//   picture,
+//   title,
+//   comment,
+//   desireDegree
+// ) {
+//   // Default options are marked with *
+//   const data = { picture, title, comment, desireDegree };
+//   const url = `http://localhost:3100/api/wishlists/${wishlistId}/wishlist_item/${wishListItemId}`;
+//   const response = await fetch(url, {
+//     method: "PATCH", // *GET, POST, PUT, DELETE, etc.
+//     mode: "cors", // no-cors, *cors, same-origin
+//     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: "same-origin", // include, *same-origin, omit
+//     headers: {
+//       "Content-Type": "application/json",
+//       // 'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     redirect: "follow", // manual, *follow, error
+//     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+//     body: JSON.stringify(data), // body data type must match "Content-Type" header
+//   });
+//   return response.json(); // parses JSON response into native JavaScript objects
+// }
 
-// PATCH определение Assignee для WishListItem
-async function patchWishListItemAssignee(
-  wishListId,
-  wishListItemId,
-  picture,
-  title,
-  comment,
-  desireDegree,
-  assigneeId
-) {
-  // Default options are marked with *
-  const data = { picture, title, comment, desireDegree, assigneeId };
-  const url = `http://localhost:3100/api/wishlists/${wishListId}/wishlist_item/${wishListItemId}/set_assignee`;
-  const response = await fetch(url, {
-    method: "PATCH", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
+// // PATCH определение Assignee для WishlistItem
+// async function patchWishlistItemAssignee(
+//   wishlistId,
+//   wishListItemId,
+//   picture,
+//   title,
+//   comment,
+//   desireDegree,
+//   assigneeId
+// ) {
+//   // Default options are marked with *
+//   const data = { picture, title, comment, desireDegree, assigneeId };
+//   const url = `http://localhost:3100/api/wishlists/${wishlistId}/wishlist_item/${wishListItemId}/set_assignee`;
+//   const response = await fetch(url, {
+//     method: "PATCH", // *GET, POST, PUT, DELETE, etc.
+//     mode: "cors", // no-cors, *cors, same-origin
+//     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: "same-origin", // include, *same-origin, omit
+//     headers: {
+//       "Content-Type": "application/json",
+//       // 'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     redirect: "follow", // manual, *follow, error
+//     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+//     body: JSON.stringify(data), // body data type must match "Content-Type" header
+//   });
+//   return response.json(); // parses JSON response into native JavaScript objects
+// }
 
-// DELETE удаление WishListItem
-async function deleteWishListItem(wishListItemId, wishListId) {
-  // Default options are marked with *
-  const data = {};
-  const url = `http://localhost:3100/api/wishlists/${wishListId}/wishlist_item/${wishListItemId}`;
-  const response = await fetch(url, {
-    method: "DELETE", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
+// // DELETE удаление WishlistItem
+// async function deleteWishlistItem(wishListItemId, wishlistId) {
+//   // Default options are marked with *
+//   const data = {};
+//   const url = `http://localhost:3100/api/wishlists/${wishlistId}/wishlist_item/${wishListItemId}`;
+//   const response = await fetch(url, {
+//     method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+//     mode: "cors", // no-cors, *cors, same-origin
+//     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: "same-origin", // include, *same-origin, omit
+//     headers: {
+//       "Content-Type": "application/json",
+//       // 'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     redirect: "follow", // manual, *follow, error
+//     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+//     body: JSON.stringify(data), // body data type must match "Content-Type" header
+//   });
+//   return response.json(); // parses JSON response into native JavaScript objects
+// }
 
-// GET all WishListItem
-async function getAllWishListItems(wishListId) {
-  const url = `http://localhost:3100/api/wishlists/${wishListId}/wishlist_item`;
-  const response = await fetch(url, {
-    method: "GET", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
+// // GET all WishlistItem
+// async function getAllWishlistItems(wishlistId) {
+//   const url = `http://localhost:3100/api/wishlists/${wishlistId}/wishlist_item`;
+//   const response = await fetch(url, {
+//     method: "GET", // *GET, POST, PUT, DELETE, etc.
+//     mode: "cors", // no-cors, *cors, same-origin
+//     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: "same-origin", // include, *same-origin, omit
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     redirect: "follow", // manual, *follow, error
+//     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+//   });
+//   return response.json(); // parses JSON response into native JavaScript objects
+// }
 
-// GET WishList
-async function getWishList(wishListId) {
-  const url = `http://localhost:3100/api/wishlists/${wishListId}`;
-  const response = await fetch(url, {
-    method: "GET", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
+// Редактирование Wishlist
+export default function EditWishlist() {
+  const dispatch = useDispatch();
+  const { userId } = useSelector((state) => state.auth.user._id);
 
-// Редактирование WishList
-export default function EditWishList() {
-  const { wishListId } = useParams();
-  // console.log('wishListId', wishListId);
+  const { wishlistId } = useParams();
+  console.log("wishlistId", wishlistId);
 
-  const [wishListItems, setWishListItems] = React.useState([]);
+  const [wishListItems, setWishlistItems] = React.useState([]);
   // console.log('wishListItems', wishListItems);
 
   const [picture, setPicture] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [comment, setComment] = React.useState("");
   const [desireDegree, setDesireDegree] = React.useState("");
-  const [wishListItemId, setWishListItemId] = React.useState("");
+  const [wishListItemId, setWishlistItemId] = React.useState("");
   const [assigneeId, setAssigneeId] = React.useState("");
   const [owner, setOwner] = React.useState([]);
-  const auth = useContext(AuthContext);
-  const userId = auth.userId;
   const [isYourAcc, setIsYourAcc] = React.useState(false);
 
   console.log(123, isYourAcc);
 
   React.useEffect(() => {
-    const callGetWishList = async () => {
-      const oneWishList = await getWishList(wishListId);
-      console.log("oneWishList", oneWishList);
-      setOwner(oneWishList.owner);
-      if (userId === owner._id) {
-        setIsYourAcc(true);
-      }
-    };
-    callGetWishList();
-  }, [wishListId]);
+    dispatch(getWishlist(wishlistId));
+    //   console.log("oneWishlist", oneWishlist);
+    //   setOwner(oneWishlist.owner);
+    //   if (userId === owner._id) {
+    //     setIsYourAcc(true);
+    //   }
+    // };
+  }, [wishlistId]);
 
   React.useEffect(() => {
-    const callGetAllWishListItems = async () => {
-      const items = await getAllWishListItems(wishListId);
-      setWishListItems(items);
-    };
-    callGetAllWishListItems();
-  }, [wishListId]);
+    dispatch(getAllWishlistItems(wishlistId));
+    // setWishlistItems(items);
+  }, [wishlistId]);
 
-  // Добавление нового WishListItem
+  // Добавление нового WishlistItem
   const handlePicture = (event) => {
     setPicture(event.target.value);
   };
@@ -217,71 +200,71 @@ export default function EditWishList() {
   const handleDesireDegree = (event) => {
     setDesireDegree(event.target.value);
   };
-  const handleChangeWishListItemId = (event) => {
-    setWishListItemId(event.target.value);
+  const handleChangeWishlistItemId = (event) => {
+    setWishlistItemId(event.target.value);
   };
 
   const getItemsFromServer = async () => {
-    const items = await getAllWishListItems(wishListId);
-    setWishListItems(items);
+    dispatch(getAllWishlistItems(wishlistId));
+    // setWishlistItems(items);
     setTitle("");
     setComment("");
     setDesireDegree("");
     setPicture("");
-    setWishListItemId("");
+    setWishlistItemId("");
     setAssigneeId("");
   };
 
-  // Сохранение WishListItem
-  const handleSaveWishListItem = async () => {
+  // Сохранение WishlistItem
+  const handleSaveWishlistItem = async () => {
     if (!wishListItemId) {
       // Create
-      await postNewWishListItem(
-        wishListId,
-        picture,
-        title,
-        comment,
-        desireDegree
+      dispatch(
+        addWishlistItem(wishlistId, picture, title, comment, desireDegree)
       );
     } else {
       // Update
-      await patchWishListItem(
-        wishListId,
-        wishListItemId,
-        picture,
-        title,
-        comment,
-        desireDegree,
-        assigneeId
+      dispatch(
+        editWishlistItem(
+          wishlistId,
+          wishListItemId,
+          picture,
+          title,
+          comment,
+          desireDegree,
+          assigneeId
+        )
       );
     }
     await getItemsFromServer();
   };
 
   const handleClickEdit = (wishListItem) => () => {
-    setWishListItemId(wishListItem._id);
+    setWishlistItemId(wishListItem._id);
     setTitle(wishListItem.title);
     setComment(wishListItem.comment);
     setDesireDegree(wishListItem.desireDegree);
     setPicture(wishListItem.picture);
   };
 
-  // Отправление DELETE запроса на сервер для удаления WishListItem
+  // Отправление DELETE запроса на сервер для удаления WishlistItem
   const handleClickDelete = (wishListItem) => async () => {
-    await deleteWishListItem(wishListItem._id, wishListId);
-    await getAllWishListItems(wishListId);
+    dispatch(deleteWishlistItem(wishListItem._id, wishlistId));
+    dispatch(getAllWishlistItems(wishlistId));
     getItemsFromServer();
   };
 
   const handleClickAssignee = (wishListItem) => async () => {
-    await patchWishListItemAssignee(
-      wishListId,
-      wishListItem._id,
-      wishListItem.picture,
-      wishListItem.title,
-      wishListItem.comment,
-      wishListItem.desireDegree,
-      userId
+    dispatch(
+      editWishlistItem(
+        wishlistId,
+        wishListItem._id,
+        wishListItem.picture,
+        wishListItem.title,
+        wishListItem.comment,
+        wishListItem.desireDegree,
+        userId
+      )
     );
     await getItemsFromServer();
   };
@@ -391,16 +374,16 @@ export default function EditWishList() {
                   <td>
                     <button
                       className="btn-edit"
-                      onClick={handleSaveWishListItem}
+                      onClick={handleSaveWishlistItem}
                     >
                       Сохранить
                     </button>
                   </td>
                   <td>
                     <input
-                      className="inputWishListItemID"
+                      className="inputWishlistItemID"
                       disabled={true}
-                      onChange={handleChangeWishListItemId}
+                      onChange={handleChangeWishlistItemId}
                       value={wishListItemId}
                     />
                   </td>

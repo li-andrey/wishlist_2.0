@@ -1,29 +1,36 @@
-const Wishlist = require("../models/Wishlist");
+const wishlistService = require("../services/wishlistService");
 
 class WishlistController {
   // Список всех Wishlists
-  async getAllWishlists(_req, res) {
-    const wishlists = await Wishlist.find({}).populate("owner");
-    res.json(wishlists);
+  async getAllWishlists(_req, res, next) {
+    try {
+      const wishlists = await wishlistService.getAllWishlists();
+      res.json(wishlists);
+    } catch (err) {
+      next(err);
+    }
   }
 
   // Получение одного Wishlist
-  async getWishlist(req, res) {
-    const wishlistId = req.params.wish_list_id;
-    const wishlist = await Wishlist.findOne({ _id: wishlistId }).populate(
-      "owner"
-    );
-    res.json(wishlist);
+  async getWishlist(req, res, next) {
+    try {
+      const wishlistId = req.params.wish_list_id;
+      const wishlist = await wishlistService.getWishlist(wishlistId);
+      res.json(wishlist);
+    } catch (err) {
+      next(err);
+    }
   }
 
   // Создание нового Wishlist
-  async createWishlist(req, res) {
-    const curentUserId = req.body.userId;
-    const wishlist = new Wishlist({
-      owner: curentUserId,
-    });
-    const savedWishlist = await wishlist.save();
-    res.json(savedWishlist);
+  async createWishlist(req, res, next) {
+    try {
+      const curentUserId = req.body.userId;
+      const newWishlist = await wishlistService.createWishlist(curentUserId);
+      res.json(newWishlist);
+    } catch (err) {
+      next(err);
+    }
   }
 }
 

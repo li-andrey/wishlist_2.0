@@ -33,7 +33,7 @@ export const PAGES = {
   editWishList: {
     id: "editWishList",
     title: "Редактирование WishList",
-    path: "/wishlists/:wishListId",
+    path: "/wishlists/:wishlistId",
   },
   pageAuth: {
     id: "pageAuth",

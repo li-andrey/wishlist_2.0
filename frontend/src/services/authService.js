@@ -1,6 +1,5 @@
 import myAxios from "../utils/axios";
 import axios from "axios";
-// import { AuthArgs } from '../redux/slices/authSlice';
 
 const register = async ({ name, email, password }) => {
   const { data } = await myAxios.post("/registration", {

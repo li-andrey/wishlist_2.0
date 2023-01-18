@@ -20,6 +20,7 @@ app.use("/api", wishlistItemsRouter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(errorMiddleware);
+
 const PORT = process.env.PORT || 3100;
 const DB_URL = process.env.DB_URL;
 

@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { PAGES } from "../App";
+import { PAGES } from "../../App";
 import { useDispatch } from "react-redux";
-import { logoutUser } from "../redux/slices/authSlice";
+import { logoutUser } from "../../redux/slices/authSlice";
 
 export const Navbar = () => {
   const navigate = useNavigate();
