@@ -35,7 +35,6 @@ mongoose
   .catch((error) => {
     console.log("error connecting to MongoDB:", error.message);
   });
-
 // app.get("/how_it_works", function (req, res) {
 //   res.sendFile(path.join(__dirname + "/build/index.html"));
 // });

@@ -2,20 +2,20 @@ import myAxios from "../utils/axios";
 
 // GET all Wishlist
 const getAllWishlists = async () => {
-  const response = await myAxios.get(`/wishlists`);
-  return response;
+  const { data } = await myAxios.get(`/wishlists`);
+  return data;
 };
 
 // GET Wishlist
 const getWishlist = async (wishlistId) => {
-  const response = await myAxios.get(`/wishlists/${wishlistId}`);
-  return response;
+  const { data } = await myAxios.get(`/wishlists/${wishlistId}`);
+  return data;
 };
 
 // Create new Wishlist
 const createWishlist = async (userId) => {
-  const response = await myAxios.post("/wishlists", { userId });
-  return response;
+  const { data } = await myAxios.post("/wishlists", { userId });
+  return data;
 };
 
 export default { getWishlist, getAllWishlists, createWishlist };

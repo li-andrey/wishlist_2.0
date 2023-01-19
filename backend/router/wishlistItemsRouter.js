@@ -17,10 +17,6 @@ router.patch(
   "/wishlists/:wish_list_id/wishlist_items/:id",
   wishlistItemsController.editWishlistItem
 );
-router.patch(
-  "/wishlists/:wish_list_id/wishlist_items/:id/set_assignee",
-  wishlistItemsController.setAssignee
-);
 router.delete(
   "/wishlists/:wish_list_id/wishlist_items/:id",
   wishlistItemsController.deleteWishlistItem

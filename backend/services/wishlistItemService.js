@@ -18,13 +18,13 @@ class WishlistService {
     return wishlistItems;
   }
 
-  async addWishlistItem({ picture, title, comment, desireDegree, wishlist }) {
+  async addWishlistItem({ data, wishlist }) {
     const wishlistItem = new WishlistItem({
-      picture,
-      title,
-      comment,
-      desireDegree,
-      wishlist,
+      picture: data.picture,
+      title: data.title,
+      comment: data.comment,
+      desireDegree: data.desireDegree,
+      wishList: wishlist,
     });
     const savedWishlistItem = await wishlistItem.save();
     if (!savedWishlistItem) {
@@ -33,24 +33,22 @@ class WishlistService {
     return savedWishlistItem;
   }
 
-  async editWishlistItem(id, { title, comment, desireDegree, picture }) {
-    const result = await WishlistItem.update(
+  async editWishlistItem(id, body) {
+    const result = await WishlistItem.findByIdAndUpdate(
       { _id: id },
-      { title, comment, desireDegree, picture }
+      {
+        $set: {
+          title: body.title,
+          comment: body.comment,
+          desireDegree: body.desireDegree,
+          picture: body.picture,
+          assigneeId: body.assigneeId,
+        },
+      },
+      { new: true }
     );
     if (!result) {
       throw ApiError.BadRequest("Не удается изменить товар");
-    }
-    return result;
-  }
-
-  async setAssignee(id, { title, comment, desireDegree, picture, assigneeId }) {
-    const result = await WishlistItem.update(
-      { _id: id },
-      { title, comment, desireDegree, picture, assigneeId }
-    );
-    if (!result) {
-      throw ApiError.BadRequest("Не удается забронировать товар");
     }
     return result;
   }
@@ -60,7 +58,7 @@ class WishlistService {
     if (!result) {
       throw ApiError.BadRequest("Не удается удалить товар");
     }
-    return result;
+    return id;
   }
 }
 

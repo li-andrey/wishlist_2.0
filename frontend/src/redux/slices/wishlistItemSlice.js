@@ -15,9 +15,8 @@ export const getAllItems = createAsyncThunk(
 
 export const getAllWishlistItems = createAsyncThunk(
   "wishlistItems/getAllWishlistItems",
-  async (params, { rejectWithValue }) => {
+  async (wishlistId, { rejectWithValue }) => {
     try {
-      const { wishlistId } = params;
       const wishlistItems = await wishlistItemService.getAllWishlistItems(
         wishlistId
       );
@@ -67,7 +66,6 @@ export const deleteWishlistItem = createAsyncThunk(
 );
 
 const initialState = {
-  items: [],
   wishlistItems: [],
   isLoading: false,
   status: null,
@@ -101,7 +99,7 @@ export const wishlistItemSlice = createSlice({
     builder.addCase(getAllWishlistItems.fulfilled, (state, action) => {
       state.isLoading = false;
       state.status = action.payload.message;
-      state.wishlistItems = action.payload.data;
+      state.wishlistItems = action.payload;
     });
     builder.addCase(getAllWishlistItems.rejected, (state, action) => {
       state.isLoading = false;
@@ -116,7 +114,7 @@ export const wishlistItemSlice = createSlice({
     builder.addCase(addWishlistItem.fulfilled, (state, action) => {
       state.isLoading = false;
       state.status = action.payload.message;
-      state.wishlistItems.push(action.payload.data);
+      state.wishlistItems.push(action.payload);
     });
     builder.addCase(addWishlistItem.rejected, (state, action) => {
       state.isLoading = false;
@@ -131,7 +129,9 @@ export const wishlistItemSlice = createSlice({
     builder.addCase(editWishlistItem.fulfilled, (state, action) => {
       state.isLoading = false;
       state.status = action.payload.message;
-      state.wishlistItems = state.wishlistItems.find(action.payload);
+      state.wishlistItems = state.wishlistItems.map((item) =>
+        item._id === action.payload._id ? action.payload : item
+      );
     });
     builder.addCase(editWishlistItem.rejected, (state, action) => {
       state.isLoading = false;
@@ -147,7 +147,7 @@ export const wishlistItemSlice = createSlice({
       state.isLoading = false;
       state.status = action.payload.message;
       state.wishlistItems = state.wishlistItems.filter(
-        (item) => (item._id = action.payload.data._id)
+        (item) => item._id != action.payload
       );
     });
     builder.addCase(deleteWishlistItem.rejected, (state, action) => {

@@ -32,8 +32,8 @@ export const Navbar = () => {
           <NavLink to={PAGES.howItWorks.path}>{PAGES.howItWorks.title}</NavLink>
         </li>
         <li>
-          <NavLink to={PAGES.newWishList.path}>
-            {PAGES.newWishList.title}
+          <NavLink to={PAGES.newWishlist.path}>
+            {PAGES.newWishlist.title}
           </NavLink>
         </li>
         <li>

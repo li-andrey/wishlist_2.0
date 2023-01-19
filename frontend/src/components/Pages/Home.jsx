@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAllWishlists } from "../../redux/slices/wishlistSlice";
 
-export default function PageHome() {
+export default function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { wishlists } = useSelector((state) => state.wishlists);
-  console.log("343", wishlists);
   React.useEffect(() => {
     dispatch(getAllWishlists());
   }, []);

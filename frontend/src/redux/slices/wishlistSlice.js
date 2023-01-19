@@ -18,7 +18,6 @@ export const getWishlist = createAsyncThunk(
   async (wishlistId, { rejectWithValue }) => {
     try {
       const wishlist = await wishlistService.getWishlist(wishlistId);
-      console.log("567", wishlist);
       return wishlist;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -30,8 +29,8 @@ export const createWishlist = createAsyncThunk(
   "wishlists/createWishlist",
   async (userId, { rejectWithValue }) => {
     try {
-      const { data } = await wishlistService.createWishlist(userId);
-      return data;
+      const newWishlist = await wishlistService.createWishlist(userId);
+      return newWishlist;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -49,7 +48,7 @@ export const wishlistSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // All wishlists
+    // Все wishlists
     builder.addCase(getAllWishlists.pending, (state) => {
       state.isLoading = true;
       state.status = null;
@@ -57,14 +56,14 @@ export const wishlistSlice = createSlice({
     builder.addCase(getAllWishlists.fulfilled, (state, action) => {
       state.isLoading = false;
       state.status = action.payload.message;
-      state.wishlists = action.payload.data;
+      state.wishlists = action.payload;
     });
     builder.addCase(getAllWishlists.rejected, (state, action) => {
       state.isLoading = false;
       state.status = action.payload.message;
     });
 
-    // One wishlist
+    // Получить один wishlist
     builder.addCase(getWishlist.pending, (state) => {
       state.isLoading = true;
       state.status = null;
@@ -78,7 +77,7 @@ export const wishlistSlice = createSlice({
       state.status = action.payload.message;
     });
 
-    // Create wishlist
+    // Создать новый wishlist
     builder.addCase(createWishlist.pending, (state) => {
       state.isLoading = true;
       state.status = null;

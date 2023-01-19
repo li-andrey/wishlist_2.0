@@ -8,34 +8,45 @@ const getAllItems = async () => {
 
 // Получение всех товаров в конкретном wishlist
 const getAllWishlistItems = async (wishlistId) => {
-  const response = await myAxios.get(`/wishlists/${wishlistId}/wishlist_items`);
-  return response;
+  const { data } = await myAxios.get(`/wishlists/${wishlistId}/wishlist_items`);
+  return data;
 };
 
 // Создание нового товара в wishlist
 const addWishlistItem = async (params) => {
-  const response = await myAxios.post(
-    `/wishlists/${params.wishlistId}/wishlist_items`,
-    { params }
+  const { wishlistId, picture, title, comment, desireDegree } = params;
+  const { data } = await myAxios.post(
+    `/wishlists/${wishlistId}/wishlist_items`,
+    { picture, title, comment, desireDegree }
   );
-  return response;
+  return data;
 };
 
 // Редактирование товара в wishlist
-const editWishlistItem = async ({ params }) => {
-  const response = await myAxios.post(
-    `/wishlists/${params.wishlistId}/wishlist_items/${params.wishListItemId}`,
-    { params }
+const editWishlistItem = async (params) => {
+  const {
+    wishlistId,
+    itemId,
+    picture,
+    title,
+    comment,
+    desireDegree,
+    assigneeId,
+  } = params;
+  const { data } = await myAxios.patch(
+    `/wishlists/${wishlistId}/wishlist_items/${itemId}`,
+    { picture, title, comment, desireDegree, assigneeId }
   );
-  return response;
+  return data;
 };
 
 // Редактирование товара в wishlist
 const deleteWishlistItem = async (params) => {
-  const response = await myAxios.post(
-    `/wishlists/${params.wishlistId}/wishlist_items/${params.wishListItemId}`
+  const { wishlistItem, wishlistId } = params;
+  const { data } = await myAxios.delete(
+    `/wishlists/${wishlistId}/wishlist_items/${wishlistItem._id}`
   );
-  return response;
+  return data;
 };
 
 export default {

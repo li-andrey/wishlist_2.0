@@ -5,14 +5,13 @@ import {
   RouterProvider,
   Route,
 } from "react-router-dom";
-import PageHowItWorks from "./components/Pages/PageHowItWorks";
-import PageHome from "./components/Pages/PageHome";
-import PageNewWishList from "./components/Pages/PageNewWishList";
-import PageEditWishList from "./components/Pages/PageEditWishList";
-import { useDispatch, useSelector } from "react-redux";
-import { isAuthState, checkAuth } from "./redux/slices/authSlice";
+import HowItWorks from "./components/Pages/HowItWorks";
+import Home from "./components/Pages/Home";
+import NewWishlist from "./components/Pages/NewWishlist";
+import EditWishlist from "./components/Pages/EditWishlist";
+import { useDispatch } from "react-redux";
+import { checkAuth } from "./redux/slices/authSlice";
 import { useEffect } from "react";
-import PageAuth from "./components/Pages/PageAuth";
 
 export const PAGES = {
   pageHome: {
@@ -25,14 +24,14 @@ export const PAGES = {
     title: "Как это работает",
     path: "/how_it_works",
   },
-  newWishList: {
-    id: "newWishList",
+  newWishlist: {
+    id: "newWishlist",
     title: "Создать WishList",
     path: "/wishlists",
   },
-  editWishList: {
-    id: "editWishList",
-    title: "Редактирование WishList",
+  editWishlist: {
+    id: "editWishlist",
+    title: "Редактирование Wishlist",
     path: "/wishlists/:wishlistId",
   },
   pageAuth: {
@@ -54,11 +53,11 @@ export default function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path={PAGES.pageHome.path} element={<AppRouter />}>
-        <Route index element={<PageHome />} />
-        <Route path={PAGES.howItWorks.path} element={<PageHowItWorks />} />
-        <Route path={PAGES.newWishList.path} element={<PageNewWishList />} />
-        <Route path={PAGES.editWishList.path} element={<PageEditWishList />} />
-        <Route path="*" element={<PageHome />} />
+        <Route index element={<Home />} />
+        <Route path={PAGES.howItWorks.path} element={<HowItWorks />} />
+        <Route path={PAGES.newWishlist.path} element={<NewWishlist />} />
+        <Route path={PAGES.editWishlist.path} element={<EditWishlist />} />
+        <Route path="*" element={<Home />} />
       </Route>
     )
   );

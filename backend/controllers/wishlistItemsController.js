@@ -28,9 +28,10 @@ class WishlistItemsController {
   async addWishlistItem(req, res, next) {
     try {
       const data = req.body;
+      const wishlist = req.params.wish_list_id;
       const wishlistItem = await wishlistItemService.addWishlistItem({
         data,
-        wishlist: req.params.wish_list_id,
+        wishlist,
       });
       res.json(wishlistItem);
     } catch (error) {
@@ -48,21 +49,6 @@ class WishlistItemsController {
         body
       );
       res.send(editedWishlistItem);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  // Редактирование WishlistItem назначение Assignee
-  async setAssignee(req, res, next) {
-    try {
-      const id = req.params.id;
-      const body = req.body;
-      const assignedWishlistItem = await wishlistItemService.setAssignee(
-        id,
-        body
-      );
-      res.send(assignedWishlistItem);
     } catch (error) {
       next(error);
     }
