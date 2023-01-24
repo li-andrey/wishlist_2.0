@@ -1,0 +1,19 @@
+@import "variables";
+@import "libs/normalize";
+
+.header_box {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 70px;
+  box-shadow: 5px 5px 5px rgb(15 15 20 / 20%);
+  background: $background;
+}
+
+.main_container {
+  min-height: 100vh;
+}
+.content_container {
+  padding-top: 70px;
+  margin: 0 25px;
+}

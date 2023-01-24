@@ -20,8 +20,13 @@ export const AppRouter = () => {
 
   return (
     <>
-      <Navbar />
-      <Outlet />
+      <div className="main_container">
+        <Navbar />
+        <div className="header_box"></div>
+        <div className="content_container">
+          <Outlet />
+        </div>
+      </div>
       <ToastContainer position="bottom-right" autoClose={2000} />
     </>
   );
