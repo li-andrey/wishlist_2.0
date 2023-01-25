@@ -1,0 +1,35 @@
+@import "../../../styles/variables.scss";
+.root {
+  position: relative;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.input {
+  width: 100%;
+  line-height: 3rem;
+  background: #fff;
+  border: 1px solid rgba(0, 121, 52, 0.15);
+  border-radius: 4px;
+  padding: 0 136px 0 15px;
+
+  &:focus {
+    width: 100%;
+  }
+}
+
+.iconBox {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  background: 0 0;
+  padding: 0;
+}
+
+.icon {
+  width: 25px;
+}

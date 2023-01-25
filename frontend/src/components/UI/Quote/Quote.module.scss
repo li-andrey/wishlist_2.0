@@ -1,0 +1,13 @@
+@import "../../../styles/variables.scss";
+
+.quoteWrapper {
+  margin: 50px 0;
+  display: flex;
+  justify-content: end;
+}
+.quote {
+  @extend %info-card;
+  width: 90%;
+
+  text-align: end;
+}

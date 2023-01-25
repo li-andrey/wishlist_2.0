@@ -10,7 +10,7 @@ import {
 } from "../../redux/slices/wishlistItemSlice";
 
 // Страница определенного Wishlist
-export default function EditWishlist() {
+const EditWishlist = () => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.user._id);
   const { wishlistItems } = useSelector((state) => state.wishlistItems);
@@ -303,4 +303,5 @@ export default function EditWishlist() {
       </div>
     </>
   );
-}
+};
+export default EditWishlist;

@@ -1,0 +1,25 @@
+@import "../../styles/variables.scss";
+
+.container {
+  padding: 30px 0;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 20px;
+  .gridItem {
+    display: flex;
+    text-align: start;
+    align-items: center;
+    .num {
+      margin-right: 20px;
+      color: $accent;
+      span {
+        font-size: 1.5rem;
+        @extend %mini-title-font;
+      }
+    }
+    p {
+      color: $white;
+      font-size: 12px;
+    }
+  }
+}

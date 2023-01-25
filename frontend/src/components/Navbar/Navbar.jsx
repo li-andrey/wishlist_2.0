@@ -1,16 +1,17 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { PAGES } from "../../App";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/authSlice";
 import styles from "./Navbar.module.scss";
-import { useState, useRef, useEffect } from "react";
 import { Button } from "../UI/Button/Button";
 
-export const Navbar = () => {
+export const Navbar = ({ isActive, setIsActive }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isActive, setIsActive] = useState(false);
   const navRef = useRef(null);
+  const { user } = useSelector((state) => state.auth);
+
   useEffect(() => {
     if (!isActive) return;
     const onClickNav = (e) => {
@@ -33,65 +34,62 @@ export const Navbar = () => {
 
   return (
     <nav
-      className={
-        isActive ? `${styles.navbar} ${styles.menu_active}` : styles.navbar
-      }
+      className={isActive ? `${styles.navbar} ${styles.active}` : styles.navbar}
       ref={navRef}
     >
       <div className={styles.navbar_header}>
-        <h5 className={styles.navbar_title}>
-          Привет
-          <br />
-          Name
-        </h5>
-        <a
+        <Link
           className={
             isActive
-              ? `${styles.navbar_btn} ${styles.btn_active}`
+              ? `${styles.navbar_btn} ${styles.active}`
               : styles.navbar_btn
           }
           onClick={() => setIsActive(!isActive)}
         >
-          <span className={isActive ? `${styles.span_active}` : ""}></span>
-        </a>
+          <span className={isActive ? `${styles.active}` : ""}></span>
+        </Link>
+        <span className={styles.navbar_title}>
+          Привет,
+          <br />
+          {user.name}
+        </span>
       </div>
-      {isActive && (
-        <div className={styles.navbar_content}>
-          <div className={styles.navbar_menu}>
-            <ul>
-              <li>
-                <NavLink
-                  className={styles.navbar_link}
-                  to={PAGES.pageHome.path}
-                >
-                  {PAGES.pageHome.title}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  className={styles.navbar_link}
-                  to={PAGES.howItWorks.path}
-                >
-                  {PAGES.howItWorks.title}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  className={styles.navbar_link}
-                  to={PAGES.newWishlist.path}
-                >
-                  {PAGES.newWishlist.title}
-                </NavLink>
-              </li>
-            </ul>
-          </div>
+      <div className={styles.navbar_content}>
+        <div className={styles.navbar_menu}>
+          <ul>
+            <li>
+              <NavLink
+                className={styles.navbar_link}
+                to={PAGES.pageHome.path}
+                onClick={() => setIsActive(false)}
+              >
+                {PAGES.pageHome.title}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={styles.navbar_link}
+                to={PAGES.about.path}
+                onClick={() => setIsActive(false)}
+              >
+                {PAGES.about.title}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={styles.navbar_link}
+                to={PAGES.newWishlist.path}
+                onClick={() => setIsActive(false)}
+              >
+                {PAGES.newWishlist.title}
+              </NavLink>
+            </li>
+          </ul>
         </div>
-      )}
+      </div>
       <div className={styles.navbar_footer}>
         <NavLink>
-          <Button className="btn-exit" onClick={handleLogout}>
-            Выйти
-          </Button>
+          <Button onClick={handleLogout}>Выйти</Button>
         </NavLink>
       </div>
     </nav>

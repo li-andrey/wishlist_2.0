@@ -5,7 +5,7 @@ import {
   RouterProvider,
   Route,
 } from "react-router-dom";
-import HowItWorks from "./components/Pages/HowItWorks";
+import About from "./components/Pages/About";
 import Home from "./components/Pages/Home";
 import NewWishlist from "./components/Pages/NewWishlist";
 import EditWishlist from "./components/Pages/EditWishlist";
@@ -19,10 +19,10 @@ export const PAGES = {
     title: "Главная",
     path: "/",
   },
-  howItWorks: {
-    id: "howItWorks",
-    title: "Как это работает",
-    path: "/how_it_works",
+  about: {
+    id: "about",
+    title: "О сервисе",
+    path: "/about",
   },
   newWishlist: {
     id: "newWishlist",
@@ -54,7 +54,7 @@ export default function App() {
     createRoutesFromElements(
       <Route path={PAGES.pageHome.path} element={<AppRouter />}>
         <Route index element={<Home />} />
-        <Route path={PAGES.howItWorks.path} element={<HowItWorks />} />
+        <Route path={PAGES.about.path} element={<About />} />
         <Route path={PAGES.newWishlist.path} element={<NewWishlist />} />
         <Route path={PAGES.editWishlist.path} element={<EditWishlist />} />
         <Route path="*" element={<Home />} />

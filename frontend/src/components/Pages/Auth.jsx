@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function Auth() {
+const Auth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -93,4 +93,6 @@ export default function Auth() {
       <ToastContainer position="bottom-right" autoClose={2000} />
     </>
   );
-}
+};
+
+export default Auth;

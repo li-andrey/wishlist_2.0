@@ -1,8 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createWishlist } from "../../redux/slices/wishlistSlice";
+import { Button } from "../UI/Button/Button";
+import SecondTitle from "../UI/SecondTitle/SecondTitle";
 
-export default function NewWishlist() {
+const NewWishlist = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -13,11 +15,11 @@ export default function NewWishlist() {
   };
 
   return (
-    <div className="create-wishlist">
-      <h1 className="second-h1"> Создать свой Wishlist </h1>
-      <button className="btn-pink" onClick={handleNewWishlist}>
-        Создать
-      </button>
+    <div>
+      <SecondTitle> Создать свой Wishlist </SecondTitle>
+      <Button onClick={handleNewWishlist}>Создать</Button>
     </div>
   );
-}
+};
+
+export default NewWishlist;

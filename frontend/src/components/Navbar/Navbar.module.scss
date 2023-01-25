@@ -1,18 +1,26 @@
 @import "../../styles/variables.scss";
 .navbar {
-  position: absolute;
-  left: -220px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: -220px;
   width: 220px;
   height: 100vh;
   background: $background;
   transition: 0.55s ease-in-out;
-  z-index: 1;
+  z-index: 10;
   box-shadow: 5px 5px 5px rgb(15 15 20 / 20%);
+  &.active {
+    transform: translateX(-220px);
+  }
+
   &_header {
+    position: absolute;
     width: 100%;
     height: 70px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     top: 0;
     left: 0;
     background: linear-gradient(
@@ -22,10 +30,10 @@
     );
   }
   &_btn {
-    position: fixed;
-    left: 25px;
     cursor: pointer;
-    transition: 0.8s ease-in-out;
+    transform: translateX(-47.5px);
+    transition: 0.4s ease-in-out;
+    z-index: 10;
     span {
       &:hover {
         background: $white;
@@ -38,7 +46,7 @@
       }
       content: "";
       display: block;
-      width: 20px;
+      width: 30px;
       height: 3px;
       border-radius: 1px;
       background: $text;
@@ -46,9 +54,9 @@
 
       &:before {
         position: absolute;
-        top: -5px;
+        top: -7px;
         content: "";
-        width: 20px;
+        width: 30px;
         height: 3px;
         border-radius: 1px;
         background: $text;
@@ -56,18 +64,30 @@
       }
       &:after {
         position: absolute;
-        top: 5px;
+        top: 7px;
         content: "";
-        width: 20px;
+        width: 30px;
         height: 3px;
         border-radius: 1px;
         background: $text;
         transition: 0.3s ease-in-out;
       }
+      &.active {
+        transform: rotate(-45deg);
+        &:before {
+          transform: translate(0px, 7px) rotate(-90deg);
+        }
+        &:after {
+          transform: translate(0px, -7px) rotate(90deg);
+        }
+      }
+    }
+    &.active {
+      transform: translateX(25px);
     }
   }
   &_content {
-    height: calc(100% - 70px);
+    height: calc(100%);
   }
   &_menu {
     position: relative;
@@ -75,25 +95,25 @@
     align-items: center;
     height: 100%;
     ul {
-      margin: 0 0 120px;
+      margin: 0 0;
       width: 100%;
     }
   }
 
   &_title {
-    padding: 8px 25px;
+    padding: 8px 35px;
     text-transform: uppercase;
+    color: $white;
+    @extend %mini-title-font;
   }
   &_link {
     display: block;
     padding: 8px 25px;
     width: 100%;
     text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 1px;
-    font-weight: 600;
+    @extend %mini-title-font;
     color: $text;
-    transition: 0.55s ease-in-out;
+    transition: 0.35s ease-in-out;
     &:hover {
       color: $white;
     }
@@ -110,23 +130,5 @@
       rgba(37, 37, 50, 0.98) 0%,
       rgba(35, 35, 45, 0.98) 100%
     );
-  }
-}
-
-.menu_active {
-  transform: translateX(220px);
-}
-
-.btn_active {
-  margin: 0 150px 0;
-}
-
-.span_active {
-  transform: rotate(-45deg);
-  &:before {
-    transform: translate(0px, 5px) rotate(-90deg);
-  }
-  &:after {
-    transform: translate(0px, -5px) rotate(90deg);
   }
 }
