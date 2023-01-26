@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createWishlist } from "../../redux/slices/wishlistSlice";
-import { Button } from "../UI/Button/Button";
+import Button from "../UI/Button/Button";
 import SecondTitle from "../UI/SecondTitle/SecondTitle";
 
 const NewWishlist = () => {

@@ -20,10 +20,10 @@ class WishlistService {
 
   async addWishlistItem({ data, wishlist }) {
     const wishlistItem = new WishlistItem({
-      picture: data.picture,
-      title: data.title,
-      comment: data.comment,
-      desireDegree: data.desireDegree,
+      picture: data.wishlistItem.picture,
+      title: data.wishlistItem.title,
+      comment: data.wishlistItem.comment,
+      desireDegree: data.wishlistItem.desireDegree,
       wishList: wishlist,
     });
     const savedWishlistItem = await wishlistItem.save();
@@ -38,10 +38,10 @@ class WishlistService {
       { _id: id },
       {
         $set: {
-          title: body.title,
-          comment: body.comment,
-          desireDegree: body.desireDegree,
-          picture: body.picture,
+          title: body.wishlistItem.title,
+          comment: body.wishlistItem.comment,
+          desireDegree: body.wishlistItem.desireDegree,
+          picture: body.wishlistItem.picture,
           assigneeId: body.assigneeId,
         },
       },

@@ -33,6 +33,7 @@ class WishlistItemsController {
         data,
         wishlist,
       });
+
       res.json(wishlistItem);
     } catch (error) {
       next(error);

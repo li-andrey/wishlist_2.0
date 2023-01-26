@@ -1,0 +1,12 @@
+.items_table {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 40px;
+  padding-bottom: 50px;
+}
+
+@media screen and (min-width: 767px) {
+  .items_table {
+    grid-template-columns: 1fr 1fr;
+  }
+}

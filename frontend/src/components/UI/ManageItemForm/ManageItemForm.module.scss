@@ -1,0 +1,25 @@
+@import "../../../styles/variables.scss";
+.form {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  .btn_edit {
+    padding: 8px 20px;
+    border-radius: 5px;
+    border: $accent solid 1px;
+    background-color: transparent;
+    @extend %mini-title-font;
+    color: $accent;
+    &:hover {
+      background-color: $accent;
+      color: $background;
+    }
+  }
+  .btn_del {
+    padding: 8px 5px;
+    background-color: red;
+    border-radius: 5px;
+    border: transparent;
+    color: $white;
+  }
+}

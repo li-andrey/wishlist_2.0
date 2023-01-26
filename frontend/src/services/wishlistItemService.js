@@ -14,28 +14,20 @@ const getAllWishlistItems = async (wishlistId) => {
 
 // Создание нового товара в wishlist
 const addWishlistItem = async (params) => {
-  const { wishlistId, picture, title, comment, desireDegree } = params;
+  const { wishlistId, wishlistItem } = params;
   const { data } = await myAxios.post(
     `/wishlists/${wishlistId}/wishlist_items`,
-    { picture, title, comment, desireDegree }
+    { wishlistItem }
   );
   return data;
 };
 
 // Редактирование товара в wishlist
 const editWishlistItem = async (params) => {
-  const {
-    wishlistId,
-    itemId,
-    picture,
-    title,
-    comment,
-    desireDegree,
-    assigneeId,
-  } = params;
+  const { wishlistId, wishlistItem, assigneeId } = params;
   const { data } = await myAxios.patch(
-    `/wishlists/${wishlistId}/wishlist_items/${itemId}`,
-    { picture, title, comment, desireDegree, assigneeId }
+    `/wishlists/${wishlistId}/wishlist_items/${wishlistItem._id}`,
+    { wishlistItem, assigneeId }
   );
   return data;
 };
