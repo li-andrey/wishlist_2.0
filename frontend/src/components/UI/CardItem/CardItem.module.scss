@@ -1,28 +1,29 @@
 @import "../../../styles/variables.scss";
 .card {
   position: relative;
-  width: 300px;
+  width: 275px;
   height: 540px;
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   margin: auto;
   display: block;
-
   .wrapper {
     position: absolute;
     top: 0;
     width: 100%;
     height: 320px;
     overflow: hidden;
+    .openIcon {
+      cursor: pointer;
+    }
   }
   .content {
     position: absolute;
     bottom: 0;
     width: 100%;
     text-align: center;
-    padding: 15px 20px 30px;
+    padding: 10px 20px 30px;
     .title {
-      height: 50px;
       margin-bottom: 10px;
       @extend %mini-title-font;
       color: $background;
@@ -34,6 +35,64 @@
     }
     .desireDegree {
       margin-bottom: 15px;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: center;
+      input {
+        display: none;
+      }
+      label {
+        padding: 0;
+        font-size: 24px;
+        line-height: 24px;
+        color: $text;
+        transition: all 0.3s;
+        &::before {
+          content: "★";
+        }
+      }
+
+      input:checked ~ label {
+        color: gold;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1181px) {
+  .wrapper {
+    &:hover {
+      .openIcon {
+        opacity: 0.5;
+      }
+    }
+    .openIcon {
+      transition: 0.5s ease;
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      img {
+        width: 50px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1180px) {
+  .wrapper {
+    .openIcon {
+      transition: 0.5s ease;
+      opacity: 0.7;
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      img {
+        width: 60px;
+      }
     }
   }
 }

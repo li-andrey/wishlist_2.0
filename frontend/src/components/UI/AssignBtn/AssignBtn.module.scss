@@ -2,7 +2,7 @@
 .btn {
   padding: 8px 25px;
   border-color: transparent;
-  border-radius: 5px;
+  border-radius: $size-radius;
   background-color: $accent;
   color: $background;
   @extend %mini-title-font;

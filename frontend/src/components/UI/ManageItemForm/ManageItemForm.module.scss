@@ -4,8 +4,8 @@
   display: flex;
   justify-content: space-between;
   .btn_edit {
-    padding: 8px 20px;
-    border-radius: 5px;
+    padding: 8px 10px;
+    border-radius: $size-radius;
     border: $accent solid 1px;
     background-color: transparent;
     @extend %mini-title-font;
@@ -17,9 +17,14 @@
   }
   .btn_del {
     padding: 8px 5px;
-    background-color: red;
-    border-radius: 5px;
-    border: transparent;
-    color: $white;
+    background-color: transparent;
+    border-radius: $size-radius;
+    border: #e61b1b solid 1px;
+    color: #e61b1b;
+    @extend %mini-title-font;
+    &:hover {
+      background-color: #e61b1b;
+      color: $white;
+    }
   }
 }

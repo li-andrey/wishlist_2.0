@@ -2,8 +2,8 @@ import myAxios from "../utils/axios";
 
 // Получение всех товаров
 const getAllItems = async () => {
-  const response = await myAxios.get(`/wishlist_items`);
-  return response;
+  const { data } = await myAxios.get(`/wishlist_items`);
+  return data;
 };
 
 // Получение всех товаров в конкретном wishlist
