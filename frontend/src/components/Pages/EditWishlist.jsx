@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
 import { getWishlist } from "../../redux/slices/wishlistSlice";
 import { useDispatch, useSelector } from "react-redux";
-
 import SecondTitle from "../UI/SecondTitle/SecondTitle";
 import WishlistItemsTable from "../WishlistItemsTable/WishlistItemsTable";
 
@@ -39,7 +37,7 @@ const EditWishlist = () => {
         wishlistId={wishlistId}
         userId={userId}
         isYourWishlist={isYourWishlist}
-      ></WishlistItemsTable>
+      />
     </>
   );
 };

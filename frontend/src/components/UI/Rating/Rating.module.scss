@@ -1,0 +1,49 @@
+@import "../../../styles/variables.scss";
+.ratingCard {
+  width: 100%;
+  margin-bottom: 10px;
+  .ratingTitle {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding-bottom: 5px;
+  }
+  .ratingArea {
+    overflow: hidden;
+    width: 200px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    input {
+      display: none;
+    }
+    label {
+      cursor: pointer;
+      padding: 0;
+      font-size: 32px;
+      line-height: 32px;
+      color: $text;
+      transition: all 0.3s;
+      &::before {
+        content: "★";
+      }
+      &:hover,
+      :active {
+        color: gold;
+        transform: scale(1.1);
+      }
+    }
+
+    input:checked ~ label {
+      color: gold;
+    }
+    // input:checked + label:hover,
+    // input:checked + label:hover ~ label,
+    // input:checked ~ label:hover,
+    // input:checked ~ label:hover ~ label,
+    // label:hover ~ input:checked ~ label {
+    //   color: gold;
+    //   text-shadow: 1px 1px red;
+    // }
+  }
+}

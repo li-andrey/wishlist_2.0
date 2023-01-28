@@ -69,6 +69,7 @@ const initialState = {
   wishlistItems: [],
   isLoading: false,
   status: null,
+  allItems: [],
 };
 
 export const wishlistItemSlice = createSlice({
@@ -84,7 +85,7 @@ export const wishlistItemSlice = createSlice({
     builder.addCase(getAllItems.fulfilled, (state, action) => {
       state.isLoading = false;
       state.status = action.payload.message;
-      state.items = action.payload.data;
+      state.allItems = action.payload;
     });
     builder.addCase(getAllItems.rejected, (state, action) => {
       state.isLoading = false;

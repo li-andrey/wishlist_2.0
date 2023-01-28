@@ -1,0 +1,57 @@
+@import "../../../styles/variables.scss";
+.input {
+  position: relative;
+  margin-bottom: 10px;
+  .inputLabel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: calc($size-bezel * 0.75) calc($size-bezel * 0.5);
+    margin: calc($size-bezel * 0.75) calc($size-bezel * 0.5);
+    white-space: nowrap;
+    transform: translate(0, 0);
+    transform-origin: 0 0;
+    background: linear-gradient(159deg, #2d2d3a 0%, #2b2b35 100%);
+    transition: transform 120ms ease-in;
+    font-weight: bold;
+    font-size: 12px;
+  }
+  .inputField {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    border: 1px solid $text;
+    padding: calc($size-bezel * 1.3) $size-bezel;
+    color: $white;
+    background: transparent;
+    border-radius: $size-radius;
+
+    &::placeholder {
+      opacity: 0;
+    }
+    &:focus {
+      &::placeholder {
+        opacity: 1;
+        font-size: 10px;
+      }
+    }
+    &:focus,
+    &:not(:placeholder-shown) {
+      & + .inputLabel {
+        transform: translate(0.25rem, -65%) scale(0.8);
+        color: $accent;
+      }
+    }
+  }
+}
+
+// .input {
+//   width: 100%;
+//   padding: 8px 15px;
+//   border-radius: 5px;
+//   background-color: $white;
+//   border-color: $white;
+//   &:focus {
+//     color: $background;
+//   }
+// }

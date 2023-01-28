@@ -1,12 +1,17 @@
-.items_table {
+.itemsList {
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 40px;
-  padding-bottom: 50px;
+  padding: 20px 0 50px;
 }
 
 @media screen and (min-width: 767px) {
-  .items_table {
+  .itemsList {
     grid-template-columns: 1fr 1fr;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .itemsList {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }

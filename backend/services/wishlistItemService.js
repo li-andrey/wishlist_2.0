@@ -4,10 +4,11 @@ const ApiError = require("../exceptions/api-error");
 class WishlistService {
   async getAllItems(_req, res) {
     const wishlistItems = await WishlistItem.find({});
+
     if (!wishlistItems) {
       throw ApiError.ServerError("Не удается найти товары в БД");
     }
-    res.json(wishlistItems);
+    return wishlistItems;
   }
 
   async getAllwishlistItems(wishlistId) {

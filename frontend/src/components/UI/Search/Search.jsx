@@ -1,5 +1,4 @@
 import styles from "./Search.module.scss";
-import search from "../../../assets/icons/search.png";
 
 const Search = ({ onClick, children, placeholder }) => {
   return (
@@ -11,9 +10,9 @@ const Search = ({ onClick, children, placeholder }) => {
       >
         {children}
       </input>
-      <div className={styles.iconBox}>
+      {/* <div className={styles.iconBox}>
         <img className={styles.icon} src={search} />
-      </div>
+      </div> */}
     </form>
   );
 };

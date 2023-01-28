@@ -9,6 +9,7 @@ import {
 } from "../../redux/slices/wishlistItemSlice";
 import CardItem from "../UI/CardItem/CardItem";
 import CreateItemForm from "../CreateItemForm/CreateItemForm";
+import Button from "../UI/Button/Button";
 
 // Страница определенного Wishlist
 const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
@@ -21,6 +22,7 @@ const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
     comment: "",
     desireDegree: "",
   });
+  const [openEdit, setOpenEdit] = useState(false);
 
   //   console.log("isYourWishlist", isYourWishlist);
 
@@ -28,6 +30,17 @@ const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
   useEffect(() => {
     dispatch(getAllWishlistItems(wishlistId));
   }, [wishlistId]);
+
+  useEffect(() => {
+    if (!openEdit) {
+      setWishlistItem({
+        picture: "",
+        title: "",
+        comment: "",
+        desireDegree: "",
+      });
+    }
+  }, [openEdit]);
 
   // Отправление DELETE запроса на сервер для СОХРАНЕНИЯ или РЕДАКТИРОВАНИЯ WishlistItem
   const handleSaveWishlistItem = async () => {
@@ -44,6 +57,7 @@ const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
         })
       );
     }
+    setOpenEdit(false);
     setWishlistItem({ picture: "", title: "", comment: "", desireDegree: "" });
   };
 
@@ -52,6 +66,7 @@ const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
     setWishlistItem({
       ...wishlistItem,
     });
+    setOpenEdit(true);
   };
 
   // Отправление DELETE запроса на сервер для УДАЛЕНИЯ WishlistItem
@@ -71,15 +86,23 @@ const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
   };
 
   return (
-    <div className="">
+    <div className={styles.wishlistWrapper}>
+      {isYourWishlist && (
+        <div className={styles.btnWrapper}>
+          <Button onClick={() => setOpenEdit(true)}>
+            Добавить ssssssssssssssssssssssssssssтовар
+          </Button>
+        </div>
+      )}
       <CreateItemForm
         wishlistItem={wishlistItem}
         setWishlistItem={setWishlistItem}
-        active={isYourWishlist}
+        active={isYourWishlist && openEdit}
         handleSaveWishlistItem={handleSaveWishlistItem}
+        setOpenEdit={setOpenEdit}
       />
 
-      <div className={styles.items_table}>
+      <div className={styles.itemsList}>
         {wishlistItems.map((el) => {
           return (
             <CardItem
