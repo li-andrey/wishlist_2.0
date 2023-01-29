@@ -29,7 +29,6 @@ export const AppRouter = () => {
       clearQueueScrollLocks();
       enablePageScroll();
     }
-    console.log("getScrollState", getScrollState());
   }, [isActive]);
 
   if (isLoading) {

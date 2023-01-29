@@ -15,9 +15,11 @@ class WishlistItemsController {
   async getAllWishlistItems(req, res, next) {
     try {
       const wishlistId = req.params.wish_list_id;
-      const wishlistItems = await wishlistItemService.getAllwishlistItems(
-        wishlistId
-      );
+      const sortValue = req.params.sort;
+      const wishlistItems = await wishlistItemService.getAllwishlistItems({
+        sortValue,
+        wishlistId,
+      });
       res.json(wishlistItems);
     } catch (error) {
       next(error);

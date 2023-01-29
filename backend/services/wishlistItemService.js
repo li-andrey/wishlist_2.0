@@ -11,8 +11,35 @@ class WishlistService {
     return wishlistItems;
   }
 
-  async getAllwishlistItems(wishlistId) {
-    const wishlistItems = await WishlistItem.find({ wishList: wishlistId });
+  async getAllwishlistItems({ wishlistId, sortValue }) {
+    let wishlistItems = [];
+    switch (sortValue) {
+      case "titleDesc":
+        wishlistItems = await WishlistItem.find({
+          wishList: wishlistId,
+        }).sort({ title: "desc" });
+        break;
+
+      case "titleAsc":
+        wishlistItems = await WishlistItem.find({
+          wishList: wishlistId,
+        }).sort({ title: "asc" });
+        break;
+
+      case "desireDesc":
+        wishlistItems = await WishlistItem.find({
+          wishList: wishlistId,
+        }).sort({ desireDegree: "desc" });
+        break;
+
+      case "desireAsc":
+        wishlistItems = await WishlistItem.find({
+          wishList: wishlistId,
+        }).sort({ desireDegree: "asc" });
+        break;
+      default:
+        break;
+    }
     if (!wishlistItems) {
       throw ApiError.BadRequest("Wishlist не найден");
     }

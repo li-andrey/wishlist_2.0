@@ -19,7 +19,6 @@ const Home = () => {
     <div>
       <MainTitle>Дари и получай то, что нужно</MainTitle>
       <Statistics wishlists={wishlists} allItems={allItems} />
-
       <WishlistsCard wishlists={wishlists} />
     </div>
   );

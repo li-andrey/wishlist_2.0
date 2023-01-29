@@ -7,8 +7,11 @@ const getAllItems = async () => {
 };
 
 // Получение всех товаров в конкретном wishlist
-const getAllWishlistItems = async (wishlistId) => {
-  const { data } = await myAxios.get(`/wishlists/${wishlistId}/wishlist_items`);
+const getAllWishlistItems = async (params) => {
+  const { wishlistId, sortValue } = params;
+  const { data } = await myAxios.get(
+    `/wishlists/${wishlistId}/wishlist_items&sortBy=${sortValue.property}`
+  );
   return data;
 };
 

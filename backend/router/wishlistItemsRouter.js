@@ -6,7 +6,7 @@ const router = new Router();
 router.get("/wishlist_items", wishlistItemsController.getAllItems);
 
 router.get(
-  "/wishlists/:wish_list_id/wishlist_items",
+  "/wishlists/:wish_list_id/wishlist_items&sortBy=:sort",
   wishlistItemsController.getAllWishlistItems
 );
 router.post(

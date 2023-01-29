@@ -4,6 +4,7 @@ const Statistics = ({ wishlists, allItems }) => {
   const date = new Date(2020, 10, 1);
   const diff = new Date() - +date;
   const years = Math.floor(diff / 1000 / 60 / 60 / 24 / 365);
+
   return (
     <div className={styles.container}>
       <div className={styles.gridItem}>
@@ -29,7 +30,7 @@ const Statistics = ({ wishlists, allItems }) => {
       </div>
       <div className={styles.gridItem}>
         <div className={styles.num}>
-          <span>15</span>
+          <span>{allItems.length}</span>
         </div>
         <p>подарков подаренно</p>
       </div>

@@ -15,10 +15,10 @@ export const getAllItems = createAsyncThunk(
 
 export const getAllWishlistItems = createAsyncThunk(
   "wishlistItems/getAllWishlistItems",
-  async (wishlistId, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
       const wishlistItems = await wishlistItemService.getAllWishlistItems(
-        wishlistId
+        params
       );
       return wishlistItems;
     } catch (error) {

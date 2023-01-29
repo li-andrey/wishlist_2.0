@@ -8,13 +8,17 @@ import {
   deleteWishlistItem,
 } from "../../redux/slices/wishlistItemSlice";
 import CardItem from "../UI/CardItem/CardItem";
+import SkeletonCard from "../UI/CardItem/SkeletonCard";
 import CreateItemForm from "../CreateItemForm/CreateItemForm";
 import Button from "../UI/Button/Button";
+import SortPopup from "../UI/SortPopup/SortPopup";
 
 // Страница определенного Wishlist
 const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
   const dispatch = useDispatch();
   const { wishlistItems } = useSelector((state) => state.wishlistItems);
+  const { isLoading } = useSelector((state) => state.wishlistItems);
+  const { sortValue } = useSelector((state) => state.filter);
 
   const [wishlistItem, setWishlistItem] = useState({
     picture: "",
@@ -28,8 +32,8 @@ const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
 
   // Получение списка всех wishlistItems
   useEffect(() => {
-    dispatch(getAllWishlistItems(wishlistId));
-  }, [wishlistId]);
+    dispatch(getAllWishlistItems({ wishlistId, sortValue }));
+  }, [wishlistId, sortValue]);
 
   useEffect(() => {
     if (!openEdit) {
@@ -89,11 +93,11 @@ const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
     <div className={styles.wishlistWrapper}>
       {isYourWishlist && (
         <div className={styles.btnWrapper}>
-          <Button onClick={() => setOpenEdit(true)}>
-            Добавить ssssssssssssssssssssssssssssтовар
-          </Button>
+          <Button onClick={() => setOpenEdit(true)}>Добавить товар</Button>
         </div>
       )}
+      <SortPopup sortValue={sortValue} />
+
       <CreateItemForm
         wishlistItem={wishlistItem}
         setWishlistItem={setWishlistItem}
@@ -104,7 +108,11 @@ const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
 
       <div className={styles.itemsList}>
         {wishlistItems.map((el) => {
-          return (
+          return isLoading ? (
+            <div className={styles.skeletonWrapper} key={el._id}>
+              <SkeletonCard />
+            </div>
+          ) : (
             <CardItem
               key={el._id}
               item={el}
@@ -116,6 +124,27 @@ const WishlistItemsTable = ({ wishlistId, userId, isYourWishlist }) => {
             />
           );
         })}
+        {/* {isLoading
+          ? wishlistItems.map((el) => {
+              return (
+                <div className={styles.skeletonWrapper} key={el._id}>
+                  <SkeletonCard />
+                </div>
+              );
+            })
+          : wishlistItems.map((el) => {
+              return (
+                <CardItem
+                  key={el._id}
+                  item={el}
+                  handleClickAssignee={handleClickAssignee}
+                  isAssignee={el.assigneeId}
+                  isYourWishlist={isYourWishlist}
+                  handleClickEdit={handleClickEdit}
+                  handleClickDelete={handleClickDelete}
+                />
+              );
+            })} */}
       </div>
     </div>
   );
