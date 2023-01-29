@@ -1,0 +1,37 @@
+@import "../../../styles/variables.scss";
+
+.root {
+  position: relative;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.input {
+  width: 100%;
+  line-height: 3rem;
+  background: #fff;
+  border: 1px solid rgba(0, 121, 52, 0.15);
+  border-radius: $size-radius;
+  padding: 0 15px 0 15px;
+  transition: width 0.4s ease-in-out;
+  background-image: url("../../../assets/icons/search.png");
+  background-position: right 20px top 10px;
+  background-repeat: no-repeat;
+
+  &:focus {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .input {
+    width: 40%;
+    padding: 0px 35px;
+    background-position: 95% 10px;
+    background-repeat: no-repeat;
+
+    &:focus {
+      width: 100%;
+    }
+  }
+}

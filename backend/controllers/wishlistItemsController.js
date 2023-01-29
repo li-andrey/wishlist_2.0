@@ -1,66 +1,72 @@
-const WishlistItem = require("../models/WishlistItem");
+const wishlistItemService = require("../services/wishlistItemService");
 
-// Получение списка всех WishlistItem
-const getAllItems = async (_req, res) => {
-  const wishlistItems = await WishlistItem.find({});
-  res.json(wishlistItems);
-};
+class WishlistItemsController {
+  // Получение списка всех WishlistItem
+  async getAllItems(_req, res, next) {
+    try {
+      const wishlistItems = await wishlistItemService.getAllItems();
+      res.json(wishlistItems);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-// Получение списка всех WishlistItem определенного Wishlist
-const getAllWishlistItems = async (req, res) => {
-  const wishlistId = req.params.wish_list_id;
-  const wishlistItems = await WishlistItem.find({ wishList: wishlistId });
-  res.json(wishlistItems);
-};
+  // Получение списка всех WishlistItem определенного Wishlist
+  async getAllWishlistItems(req, res, next) {
+    try {
+      const wishlistId = req.params.wish_list_id;
+      const sortValue = req.params.sort;
+      const wishlistItems = await wishlistItemService.getAllwishlistItems({
+        sortValue,
+        wishlistId,
+      });
+      res.json(wishlistItems);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-//  Добавление нового WishlistItem
-const addWishlistItem = async (req, res) => {
-  const body = req.body;
-  const wishlistItem = new WishlistItem({
-    picture: body.picture,
-    title: body.title,
-    comment: body.comment,
-    desireDegree: body.desireDegree,
-    wishList: req.params.wish_list_id,
-  });
-  const savedWishlistItem = await wishlistItem.save();
-  res.json(savedWishlistItem);
-};
+  //  Добавление нового WishlistItem
+  async addWishlistItem(req, res, next) {
+    try {
+      const data = req.body;
+      const wishlist = req.params.wish_list_id;
+      const wishlistItem = await wishlistItemService.addWishlistItem({
+        data,
+        wishlist,
+      });
 
-// Редактирование WishlistItem
-const editWishlistItem = async (req, res) => {
-  const id = req.params.id;
-  const { picture, title, comment, desireDegree } = req.body;
-  const result = await WishlistItem.update(
-    { _id: id },
-    { title, comment, desireDegree, picture }
-  );
-  res.send(result);
-};
+      res.json(wishlistItem);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-// Редактирование WishlistItem назначение Assignee
-const setAssignee = async (req, res) => {
-  const id = req.params.id;
-  const { picture, title, comment, desireDegree, assigneeId } = req.body;
-  const result = await WishlistItem.update(
-    { _id: id },
-    { title, comment, desireDegree, picture, assigneeId }
-  );
-  res.send(result);
-};
+  // Редактирование WishlistItem
+  async editWishlistItem(req, res, next) {
+    try {
+      const id = req.params.id;
+      const body = req.body;
+      const editedWishlistItem = await wishlistItemService.editWishlistItem(
+        id,
+        body
+      );
+      res.send(editedWishlistItem);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-// Удаление WishlistItem
-const deleteWishlistItem = async (req, res) => {
-  const id = req.params.id;
-  const result = await WishlistItem.deleteOne({ _id: id });
-  res.send(result);
-};
+  // Удаление WishlistItem
+  async deleteWishlistItem(req, res, next) {
+    try {
+      const id = req.params.id;
+      const result = await wishlistItemService.deleteWishlistItem(id);
+      res.send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+}
 
-module.exports = {
-  getAllItems,
-  getAllWishlistItems,
-  addWishlistItem,
-  editWishlistItem,
-  setAssignee,
-  deleteWishlistItem,
-};
+module.exports = new WishlistItemsController();

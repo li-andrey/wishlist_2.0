@@ -1,75 +1,96 @@
 const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const authService = require("../services/authService");
 const { validationResult } = require("express-validator");
+const ApiError = require("../exceptions/api-error");
 
-const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
-
-// Получение списка всех пользователей
-const getUsers = async (_req, res) => {
-  const users = await User.find({});
-  res.json(users);
-};
-
-// Регистрация пользователя
-const registration = async (req, res) => {
-  try {
-    console.log("Body:", req.body);
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message: "Некорректные данные при регистраци",
-      });
-    }
-    const { name, email, password } = req.body;
-    const candidate = await User.findOne({ email });
-    if (candidate) {
-      return res
-        .status(400)
-        .json({ message: "Такой пользователь уже существует" });
-    }
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({
-      name,
-      email,
-      password: hashedPassword,
-    });
-    await user.save();
-    res.status(201).json({ message: "Пользователь создан" });
-  } catch (error) {
-    res.status(500).json({ message: "Что-то пошло не так" });
+class AuthController {
+  // Получение списка всех пользователей
+  async getUsers(_req, res) {
+    const users = await User.find({});
+    res.json(users);
   }
-};
 
-// Вход в систему
-const login = async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message: "Некорректные данные при регистраци",
+  // Регистрация пользователя
+  async registration(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(
+          ApiError.BadRequest(
+            "Некорректные данные при регистраци",
+            errors.array()
+          )
+        );
+      }
+      const { name, email, password } = req.body;
+      const userData = await authService.registration(name, email, password);
+      res.cookie("refreshToken", userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
       });
+      res.json(userData);
+    } catch (error) {
+      next(error);
     }
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "Пользователь не найден" });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res
-        .status(400)
-        .json({ message: "Неверный пароль, попробуйте снова" });
-    }
-    const token = jwt.sign({ userId: user.id }, JWT_ACCESS_SECRET, {
-      expiresIn: "1h",
-    });
-    res.json({ token, userId: user.id, message: "Пользователь в сети" });
-  } catch (error) {
-    res.status(500).json({ message: "Что-то пошло не так" });
   }
-};
 
-module.exports = { getUsers, registration, login };
+  // Вход в систему
+  async login(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest("Некорректные данные", errors.array()));
+      }
+      const { email, password } = req.body;
+      const userData = await authService.login(email, password);
+      res.cookie("refreshToken", userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+
+      res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Выход из системы
+  async logout(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies;
+      const token = await authService.logout(refreshToken);
+      res.clearCookie("refreshToken");
+      return res.json(token);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Активация пользователя
+  async activate(req, res, next) {
+    try {
+      const activationLink = req.params.link;
+      await authService.activate(activationLink);
+      return res.redirect(process.env.CLIENT_URL);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Обновление токена
+  async refresh(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies;
+      const userData = await authService.refresh(refreshToken);
+      res.cookie("refreshToken", userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      return res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
+}
+
+module.exports = new AuthController();

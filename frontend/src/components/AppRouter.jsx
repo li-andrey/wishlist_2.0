@@ -1,59 +1,57 @@
-import { Routes, Route } from "react-router-dom";
-import PageHowItWorks from "./Pages/PageHowItWorks";
-import PageHome from "./Pages/PageHome";
-import PageNewWishList from "./Pages/PageNewWishList";
-import PageEditWishList from "./Pages/PageEditWishList";
-import PageAuth from "./Pages/PageAuth";
-import { Navbar } from "../components/Navbar";
+import { useState, useRef, useEffect } from "react";
 
-export const PAGES = {
-  pageHome: {
-    id: "pageHome",
-    title: "Главная",
-    path: "/",
-  },
-  howItWorks: {
-    id: "howItWorks",
-    title: "Как это работает",
-    path: "/how_it_works",
-  },
-  newWishList: {
-    id: "newWishList",
-    title: "Создать WishList",
-    path: "/wishlists",
-  },
-  editWishList: {
-    id: "editWishList",
-    title: "Редактирование WishList",
-    path: "/wishlists/:wishListId",
-  },
-  pageAuth: {
-    id: "pageAuth",
-    title: "Авторизация",
-    path: "/",
-  },
-};
+import { useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import PageAuth from "./Pages/Auth";
+import { Navbar } from "./Navbar/Navbar";
+import { isAuthState, isLoadingState } from "../redux/slices/authSlice";
+import {
+  disablePageScroll,
+  enablePageScroll,
+  clearQueueScrollLocks,
+  getScrollState,
+} from "scroll-lock";
+import Header from "./UI/Header/Header";
 
-export const AppRouter = (isAuthenticated) => {
-  if (isAuthenticated) {
-    return (
-      <Routes>
-        <Route path={PAGES.pageHome.path} element={<Navbar />}>
-          <Route index element={<PageHome />} />
-          <Route path={PAGES.howItWorks.path} element={<PageHowItWorks />} />
-          <Route path={PAGES.newWishList.path} element={<PageNewWishList />} />
-          <Route
-            path={PAGES.editWishList.path}
-            element={<PageEditWishList />}
-          />
-          <Route path="*" element={<PageHome />} />
-        </Route>
-      </Routes>
-    );
+export const AppRouter = () => {
+  const isAuth = useSelector(isAuthState);
+  const isLoading = useSelector(isLoadingState);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    if (isActive) {
+      clearQueueScrollLocks();
+      disablePageScroll();
+    }
+    if (!isActive) {
+      clearQueueScrollLocks();
+      enablePageScroll();
+    }
+  }, [isActive]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
+
+  if (!isAuth) {
+    return <PageAuth />;
+  }
+
   return (
-    <Routes>
-      <Route path="*" element={<PageAuth />} />
-    </Routes>
+    <>
+      <div className="main_container">
+        <Header />
+        <Navbar isActive={isActive} setIsActive={setIsActive} />
+        <div
+          className={isActive ? "modal_layout active" : "modal_layout"}
+        ></div>
+        <div className="content_container">
+          <Outlet />
+        </div>
+      </div>
+      <ToastContainer position="bottom-right" autoClose={2000} />
+    </>
   );
 };

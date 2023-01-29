@@ -1,0 +1,38 @@
+@import "../../../styles/variables.scss";
+.sortWrapper {
+  padding: 40px 0 5px;
+  .static {
+    position: relative;
+    display: flex;
+  }
+  .sortDropDown {
+    position: relative;
+    .sortType {
+      padding-left: 20px;
+      color: $white;
+      cursor: pointer;
+    }
+    .sortImg {
+      position: absolute;
+      top: 2px;
+      left: 15px;
+      width: 20px;
+      cursor: pointer;
+    }
+  }
+
+  .sortList {
+    padding: 5px 0 0 150px;
+
+    .sortItem {
+      cursor: pointer;
+      transition: all 0.5s ease-out;
+      &:hover {
+        color: $white;
+      }
+      &:not(:last-child) {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}

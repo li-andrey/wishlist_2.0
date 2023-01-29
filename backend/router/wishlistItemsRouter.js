@@ -1,23 +1,25 @@
 const Router = require("express").Router;
-const {
-  getAllItems,
-  getAllWishlistItems,
-  addWishlistItem,
-  editWishlistItem,
-  setAssignee,
-  deleteWishlistItem,
-} = require("../controllers/wishlistItemsController");
+const wishlistItemsController = require("../controllers/wishlistItemsController");
 
 const router = new Router();
 
-router.get("/wishlist_items", getAllItems);
-router.get("/wishlists/:wish_list_id/wishlist_item", getAllWishlistItems);
-router.post("/wishlists/:wish_list_id/wishlist_item", addWishlistItem);
-router.patch("/wishlists/:wish_list_id/wishlist_item/:id", editWishlistItem);
-router.patch(
-  "/wishlists/:wish_list_id/wishlist_item/:id/set_assignee",
-  setAssignee
+router.get("/wishlist_items", wishlistItemsController.getAllItems);
+
+router.get(
+  "/wishlists/:wish_list_id/wishlist_items&sortBy=:sort",
+  wishlistItemsController.getAllWishlistItems
 );
-router.delete("/wishlists/:wish_list_id/wishlist_item/:id", deleteWishlistItem);
+router.post(
+  "/wishlists/:wish_list_id/wishlist_items",
+  wishlistItemsController.addWishlistItem
+);
+router.patch(
+  "/wishlists/:wish_list_id/wishlist_items/:id",
+  wishlistItemsController.editWishlistItem
+);
+router.delete(
+  "/wishlists/:wish_list_id/wishlist_items/:id",
+  wishlistItemsController.deleteWishlistItem
+);
 
 module.exports = router;
