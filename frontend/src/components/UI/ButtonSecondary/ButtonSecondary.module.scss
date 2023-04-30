@@ -3,12 +3,13 @@
   padding: 8px 25px;
   border-radius: $size-radius;
   background-color: transparent;
-  border-color: $accent;
-  color: $accent;
+  border-color: transparent;
+  color: $text;
   cursor: pointer;
   @extend %mini-title-font;
   &:hover {
-    background-color: $accent;
-    color: $background;
+    background-color: transparent;
+    border-color: $accent;
+    color: $accent;
   }
 }

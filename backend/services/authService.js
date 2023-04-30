@@ -21,7 +21,7 @@ class AuthService {
     });
 
     // Отправка упрощенного welcomeисьма с логином и паролем
-    await mailService.sendWelcomeMail(email, password);
+    // await mailService.sendWelcomeMail(email, password);
 
     // await mailService.sendActivationMail(
     //   email,

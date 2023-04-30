@@ -4,7 +4,7 @@ import Quote from "../UI/Quote/Quote";
 
 const About = () => {
   return (
-    <div className="about-container">
+    <div>
       <SecondTitle>
         MY WISHLIST - это уютный сервис для помощи в подборе подарков
       </SecondTitle>
