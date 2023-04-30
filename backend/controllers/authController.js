@@ -28,6 +28,7 @@ class AuthController {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
+
       res.json(userData);
     } catch (error) {
       next(error);
