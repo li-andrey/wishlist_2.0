@@ -14,8 +14,8 @@ import { checkAuth } from "./redux/slices/authSlice";
 import { useEffect } from "react";
 
 export const PAGES = {
-  pageHome: {
-    id: "pageHome",
+  home: {
+    id: "home",
     title: "Главная",
     path: "/",
   },
@@ -34,8 +34,8 @@ export const PAGES = {
     title: "Редактирование Wishlist",
     path: "/wishlists/:wishlistId",
   },
-  pageAuth: {
-    id: "pageAuth",
+  auth: {
+    id: "auth",
     title: "Авторизация",
     path: "/",
   },
@@ -52,7 +52,7 @@ export default function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path={PAGES.pageHome.path} element={<AppRouter />}>
+      <Route path={PAGES.home.path} element={<AppRouter />}>
         <Route index element={<Home />} />
         <Route path={PAGES.about.path} element={<About />} />
         <Route path={PAGES.newWishlist.path} element={<NewWishlist />} />

@@ -1,6 +1,7 @@
 @import "../../styles/variables.scss";
 .table {
   width: 100%;
+  border-radius: 5px;
   @extend %info-card;
   th {
     text-align: start;

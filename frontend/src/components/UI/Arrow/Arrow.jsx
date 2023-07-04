@@ -1,12 +1,8 @@
 import arrow from "../../../assets/icons/arrow.png";
 import styles from "./Arrow.module.scss";
 
-const Arrow = ({ onClick }) => {
-  return (
-    <a onClick={onClick}>
-      <img className={styles.arr} src={arrow} />
-    </a>
-  );
+const Arrow = () => {
+  return <img className={styles.arr} src={arrow} />;
 };
 
 export default Arrow;

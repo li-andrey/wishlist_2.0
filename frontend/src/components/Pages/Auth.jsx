@@ -67,6 +67,7 @@ const Auth = () => {
             placeholder="Введите ФИО"
             onChange={changeHandler}
             label="ФИО"
+            name="name"
           />
         </div>
         <div className="row">
@@ -76,6 +77,7 @@ const Auth = () => {
             value={form.email}
             onChange={changeHandler}
             label="Email"
+            name="email"
           />
         </div>
         <div className="row">
@@ -85,6 +87,7 @@ const Auth = () => {
             value={form.password}
             onChange={changeHandler}
             label="Пароль"
+            name="password"
           />
         </div>
         <div className="btn-row">

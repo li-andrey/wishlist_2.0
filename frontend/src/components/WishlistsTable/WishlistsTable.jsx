@@ -12,19 +12,20 @@ const WishlistsTable = ({ wishlists }) => {
       <tbody>
         {wishlists
           .filter((el) =>
-            el.owner.name.toLowerCase().includes(searchValue.toLowerCase())
+            el.owner.name?.toLowerCase().includes(searchValue.toLowerCase())
           )
           .map((el) => (
-            <tr key={el._id}>
+            <tr
+              key={el._id}
+              onClick={() => {
+                navigate(`/wishlists/${el._id}`);
+              }}
+            >
               <th>
                 <div>{el.owner.name}</div>
               </th>
               <td>
-                <Arrow
-                  onClick={() => {
-                    navigate(`/wishlists/${el._id}`);
-                  }}
-                />
+                <Arrow />
               </td>
             </tr>
           ))}
