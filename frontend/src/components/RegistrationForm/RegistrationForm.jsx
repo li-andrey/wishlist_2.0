@@ -1,7 +1,6 @@
 import { Formik, Field, Form, FormikHelpers } from "formik";
 import styles from "./RegistrationForm.module.scss";
 import * as Yup from "yup";
-import { useState } from "react";
 
 const RegistrationForm = ({ isOpen, setIsOpen, handleRegister }) => {
   const DisplayingErrorMessagesSchema = Yup.object().shape({
