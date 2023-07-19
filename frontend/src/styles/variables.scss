@@ -1,4 +1,5 @@
-$background: #20202a;
+$background: linear-gradient(159deg, #2d2d3a 0%, #2b2b35 100%);
+$dark: #20202a;
 $accent: #ffc107;
 $text: #8c8c8e;
 $white: #fafafc;
@@ -6,9 +7,12 @@ $white: #fafafc;
 $size-bezel: 0.5rem;
 $size-radius: 5px;
 
+$font-title: "TenorSans", sans-serif;
+$font-text: "Gilroy", sans-serif;
+
 %mini-title-font {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 1px;
   line-height: 1.1rem;
   text-transform: uppercase;
@@ -16,6 +20,6 @@ $size-radius: 5px;
 
 %info-card {
   box-shadow: 0 3px 8px 0 rgb(15 15 20 / 20%);
-  background: linear-gradient(159deg, #2d2d3a 0%, #2b2b35 100%);
+  background: $background;
   padding: 10px 15px;
 }

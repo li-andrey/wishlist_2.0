@@ -3,7 +3,7 @@
   margin: 0;
   list-style: none;
   outline: none;
-  font-family: "Montserrat", Montserrat, sans-serif;
+  font-family: $font-text;
   box-sizing: border-box;
 }
 
@@ -29,6 +29,7 @@ h3,
 h4,
 h5 {
   color: $white;
+  font-family: $font-title;
 }
 
 h1 {

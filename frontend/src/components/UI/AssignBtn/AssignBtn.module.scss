@@ -4,7 +4,7 @@
   border-color: transparent;
   border-radius: $size-radius;
   background-color: $accent;
-  color: $background;
+  color: $dark;
   @extend %mini-title-font;
   &:hover {
     background-color: transparent;
