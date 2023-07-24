@@ -6,7 +6,7 @@ const About = () => {
   return (
     <div>
       <SecondTitle>
-        MY WISHLIST - это уютный сервис для помощи в подборе подарков
+        MY WISHLIST - это уютный сервис для помощи в подборе подарков для ваших друзей и родственников
       </SecondTitle>
 
       <ResponsivePlayer />
